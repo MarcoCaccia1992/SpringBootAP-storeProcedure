@@ -10,4 +10,5 @@ public class MicroserviceApplication {
 		SpringApplication.run(MicroserviceApplication.class, args);
 	}
 
+
 }
