@@ -1,7 +1,8 @@
-package com.example.microservice.test;
+package com.example.microservice.service;
 
 import com.example.microservice.entity.ProductsEntity;
-import com.example.microservice.service.ProductService;
+import com.example.microservice.repository.ProductsRepository;
+import com.example.microservice.utils.ProductsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +15,21 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProductServiceImpl {
+public class ProductServiceImpl implements ProductService{
 
+    private ProductsRepository productsRepository;
 
-    @Autowired
-    private ProductService productService;
+    private ProductsUtils productsUtils;
 
     @PersistenceContext
-    private EntityManager em;
+    private EntityManager entityManager;
+
+    @Autowired
+    public ProductServiceImpl(ProductsRepository productsRepository, ProductsUtils productsUtils, EntityManager entityManager){
+        this.productsRepository = productsRepository;
+        this.productsUtils = productsUtils;
+        this.entityManager = entityManager;
+    }
 
 
 
@@ -29,9 +37,10 @@ public class ProductServiceImpl {
 
 
     //come chiamare una stored procedure da SpringBootApp con parametri
+    @Override
     public String insertNewProduct(String name_product, Integer code_product) {
 
-        StoredProcedureQuery spQuery= em.createStoredProcedureQuery("sp_insertProductsCheckId")
+        StoredProcedureQuery spQuery= entityManager.createStoredProcedureQuery("sp_insertProductsCheckId")
                 .registerStoredProcedureParameter(1, String.class, ParameterMode.IN)
                 .registerStoredProcedureParameter(2, Integer.class, ParameterMode.IN)
                 .setParameter(1, name_product)
@@ -39,36 +48,28 @@ public class ProductServiceImpl {
 
         spQuery.execute();
 
-        ProductsEntity pe = getLastProduct();
+        List<ProductsEntity> allProducts = allProducts();
+        ProductsEntity pe = productsUtils.getLastProduct(allProducts);
 
         return "Perfect, you've already insert into DB:\n" + pe.getId_product() + "\n" + pe.getName_product() + "\n" + pe.getCode_product();
     }
 
+    @Override
     public List<ProductsEntity> allProducts() {
 
         List<ProductsEntity> result = new ArrayList<>();
-        result = productService.findAll();
+        result = productsRepository.findAll();
         return result;
     }
 
+    @Override
     public ProductsEntity findProductById(Integer id_product){
 
-        Optional<ProductsEntity> peResult = productService.findById(id_product);
+        Optional<ProductsEntity> peResult = productsRepository.findById(id_product);
         ProductsEntity peResultInObject = peResult.get();
         return peResultInObject;
     }
 
-    public ProductsEntity getLastProduct(){
 
-        ProductsEntity peResult = new ProductsEntity();
-        List<ProductsEntity> allProducts = allProducts();
-        for(int i=0; i<allProducts.size(); i++){
-            if(i == allProducts.size() -1){
-                peResult = allProducts.get(i);
-            }
-        }
-
-        return peResult;
-    }
 
 }
