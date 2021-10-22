@@ -44,18 +44,17 @@ public class ProductsController {
         return "Your ID is:\n" + peRes.getId_product() + "\n" + peRes.getName_product() + "\n" +peRes.getCode_product();
     }
 
-   /* @DeleteMapping(value = "/deleteById", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String deleteById(@RequestParam("id_product")Integer id_product){
+   @DeleteMapping(value = "/deleteAndOrderById", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ProductsEntity> deleteAndOrderById(@RequestParam("id_product")Integer id_product){
 
-        ProductsEntity peRes = productServiceImpl.findProductById(id_product);
-        return "You've already deleted this ID:\n" + peRes.getId_product() + "\n" + peRes.getName_product() + "\n" +peRes.getCode_product();
-    }*/
-
-
+       List<ProductsEntity> resultProductsList = productServiceImpl.deleteAndOrderProductsByIDs(id_product);
+        return resultProductsList;
+    }
 
 
-    //TO DO
-    /*DELETE
+
+
+    /*TO DO
     PUT
     JOIN UNO TO MANY
     E DTO VARI

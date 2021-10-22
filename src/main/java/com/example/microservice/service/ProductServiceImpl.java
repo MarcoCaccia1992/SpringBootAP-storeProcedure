@@ -6,10 +6,6 @@ import com.example.microservice.utils.ProductsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.ParameterMode;
-import javax.persistence.PersistenceContext;
-import javax.persistence.StoredProcedureQuery;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,17 +14,12 @@ import java.util.Optional;
 public class ProductServiceImpl implements ProductService{
 
     private ProductsRepository productsRepository;
-
     private ProductsUtils productsUtils;
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
     @Autowired
-    public ProductServiceImpl(ProductsRepository productsRepository, ProductsUtils productsUtils, EntityManager entityManager){
+    public ProductServiceImpl(ProductsRepository productsRepository, ProductsUtils productsUtils){
         this.productsRepository = productsRepository;
         this.productsUtils = productsUtils;
-        this.entityManager = entityManager;
     }
 
 
@@ -40,13 +31,7 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public String insertNewProduct(String name_product, Integer code_product) {
 
-        StoredProcedureQuery spQuery= entityManager.createStoredProcedureQuery("sp_insertProductsCheckId")
-                .registerStoredProcedureParameter(1, String.class, ParameterMode.IN)
-                .registerStoredProcedureParameter(2, Integer.class, ParameterMode.IN)
-                .setParameter(1, name_product)
-                .setParameter(2, code_product);
-
-        spQuery.execute();
+        productsUtils.sp_insertProductsCheckId(name_product, code_product);
 
         List<ProductsEntity> allProducts = allProducts();
         ProductsEntity pe = productsUtils.getLastProduct(allProducts);
@@ -70,6 +55,15 @@ public class ProductServiceImpl implements ProductService{
         return peResultInObject;
     }
 
+    @Override
+    public List<ProductsEntity> deleteAndOrderProductsByIDs(Integer id_product) {
+
+        productsUtils.sp_deleteUsers(id_product);
+        productsUtils.sp_orderProductsIDS(id_product);
+
+        List<ProductsEntity> allProducts = allProducts();
+        return allProducts;
+    }
 
 
 }

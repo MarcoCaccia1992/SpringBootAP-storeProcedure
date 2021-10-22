@@ -15,4 +15,6 @@ public interface ProductService{
 
     public ProductsEntity findProductById(Integer id_product);
 
+    public List<ProductsEntity> deleteAndOrderProductsByIDs(Integer id_product);
+
 }
