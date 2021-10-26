@@ -17,4 +17,8 @@ public interface ProductService{
 
     public List<ProductsEntity> deleteAndOrderProductsByIDs(Integer id_product);
 
+    public String updateAllProductsDataById(Integer id_product, String name_product, Integer code_product);
+
+    public String updateProductsDataByIdCheckNULL(Integer id_product, String name_product, Integer code_product);
+
 }

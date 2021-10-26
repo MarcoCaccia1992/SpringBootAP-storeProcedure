@@ -57,6 +57,33 @@ public class ProductsUtils {
         spQueryOrderProductsIDS.execute();
     }
 
+    public void sp_updateProducts(Integer id_product, String name_product, Integer code_product){
+
+        StoredProcedureQuery spQueryUpdateProductsByIDS= entityManager.createStoredProcedureQuery("sp_updateProducts")
+                .registerStoredProcedureParameter(1, Integer.class, ParameterMode.IN)
+                .registerStoredProcedureParameter(2, String.class, ParameterMode.IN)
+                .registerStoredProcedureParameter(3, Integer.class, ParameterMode.IN)
+                .setParameter(1, id_product)
+                .setParameter(2, name_product)
+                .setParameter(3, code_product);
+
+        spQueryUpdateProductsByIDS.execute();
+    }
+
+    public void sp_updateProductsCheckNull(Integer id_product, String name_product, Integer code_product){
+
+        StoredProcedureQuery spQueryOrderProductsIDS= entityManager.createStoredProcedureQuery("sp_updateProductsCheckNull")
+                .registerStoredProcedureParameter(1, Integer.class, ParameterMode.IN)
+                .registerStoredProcedureParameter(2, String.class, ParameterMode.IN)
+                .registerStoredProcedureParameter(3, Integer.class, ParameterMode.IN)
+                .setParameter(1, id_product)
+                .setParameter(2, name_product)
+                .setParameter(3, code_product);
+
+        spQueryOrderProductsIDS.execute();
+    }
+
+
 //------------------------------------------------BUSINESS-LOGIC------------------------------------------------
 
     public ProductsEntity getLastProduct(List<ProductsEntity> allProducts){

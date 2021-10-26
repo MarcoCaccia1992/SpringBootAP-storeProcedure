@@ -65,5 +65,29 @@ public class ProductServiceImpl implements ProductService{
         return allProducts;
     }
 
+    @Override
+    public String updateAllProductsDataById(Integer id_product, String name_product, Integer code_product) {
+
+        ProductsEntity productBeforeUpdate = findProductById(id_product);
+        productsUtils.sp_updateProducts(id_product, name_product, code_product);
+        ProductsEntity productsEntityAfterUpdate = findProductById(id_product);
+
+        return "You've already updated PRODUCT --> FROM:\n" + productBeforeUpdate.getName_product() + "\n" + productBeforeUpdate.getCode_product() + "\n" +
+                "-->TO:\n" + productsEntityAfterUpdate.getName_product() + "\n" + productsEntityAfterUpdate.getCode_product();
+
+    }
+
+    @Override
+    public String updateProductsDataByIdCheckNULL(Integer id_product, String name_product, Integer code_product) {
+
+        ProductsEntity productBeforeUpdate = findProductById(id_product);
+        productsUtils.sp_updateProductsCheckNull(id_product, name_product, code_product);
+        ProductsEntity productsEntityAfterUpdate = findProductById(id_product);
+
+        return "You've already updated PRODUCT --> FROM:\n" + productBeforeUpdate.getName_product() + "\n" + productBeforeUpdate.getCode_product() + "\n" +
+                "-->TO:\n" + productsEntityAfterUpdate.getName_product() + "\n" + productsEntityAfterUpdate.getCode_product();
+
+    }
+
 
 }
