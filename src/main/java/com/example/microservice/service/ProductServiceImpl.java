@@ -44,6 +44,7 @@ public class ProductServiceImpl implements ProductService{
 
         List<ProductsEntity> result = new ArrayList<>();
         result = productsRepository.findAll();
+        result = productsUtils.orderListProductsByIdSTREAM(result);
         return result;
     }
 

@@ -8,7 +8,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
 import javax.persistence.StoredProcedureQuery;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class ProductsUtils {
@@ -27,6 +28,7 @@ public class ProductsUtils {
 
 
 //-----------------------------------------------STORED-PROCEDURE-----------------------------------------------
+
 
     public void sp_insertProductsCheckId(String name_product, Integer code_product){
 
@@ -86,6 +88,7 @@ public class ProductsUtils {
 
 //------------------------------------------------BUSINESS-LOGIC------------------------------------------------
 
+
     public ProductsEntity getLastProduct(List<ProductsEntity> allProducts){
 
         ProductsEntity peResult = new ProductsEntity();
@@ -96,5 +99,28 @@ public class ProductsUtils {
         }
 
         return peResult;
+    }
+
+    //metodo per tornare la lista ordinata no lamda
+    public List<ProductsEntity> orderListProductsById(List<ProductsEntity> list){
+
+        Collections.sort(list, new Comparator<ProductsEntity>() {
+            @Override
+            public int compare(ProductsEntity productsEntity, ProductsEntity t1) {
+                return productsEntity.getId_product().compareTo(t1.getId_product());
+            }
+        });
+
+        return list;
+    }
+
+    // metodo per tornare una lista ordinata tramite lambda e con il reversed() le darà al contrario
+    public List<ProductsEntity> orderListProductsByIdSTREAM(List<ProductsEntity> list){
+
+        List<ProductsEntity> sortedProducts = list.stream()
+                .sorted(Comparator.comparing(ProductsEntity::getId_product)/*.reversed()*/)
+                .collect(Collectors.toList());
+
+        return sortedProducts;
     }
 }

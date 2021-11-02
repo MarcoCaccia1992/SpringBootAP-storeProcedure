@@ -13,7 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Data
 @ToString
-public class ProductsEntity {
+public class ProductsEntity{
 
     @Id
     @Column(name="id_product")
