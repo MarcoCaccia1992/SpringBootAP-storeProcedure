@@ -30,13 +30,15 @@ public class ProductsUtils {
 //-----------------------------------------------STORED-PROCEDURE-----------------------------------------------
 
 
-    public void sp_insertProductsCheckId(String name_product, Integer code_product){
+    public void sp_insertProductsCheckId(String name_product, Integer code_product, Integer sk_shop){
 
         StoredProcedureQuery spQueryInsertProductsCheckId= entityManager.createStoredProcedureQuery("sp_insertProductsCheckId")
                 .registerStoredProcedureParameter(1, String.class, ParameterMode.IN)
                 .registerStoredProcedureParameter(2, Integer.class, ParameterMode.IN)
+                .registerStoredProcedureParameter(3, Integer.class, ParameterMode.IN)
                 .setParameter(1, name_product)
-                .setParameter(2, code_product);
+                .setParameter(2, code_product)
+                .setParameter(3, sk_shop);
 
         spQueryInsertProductsCheckId.execute();
     }

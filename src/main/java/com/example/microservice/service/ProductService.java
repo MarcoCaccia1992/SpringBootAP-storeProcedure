@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public interface ProductService{
 
-    public String insertNewProduct(String name_product, Integer code_product);
+    public String insertNewProduct(String name_product, Integer code_product, Integer fk_shop);
 
     public List<ProductsEntity> allProducts();
 

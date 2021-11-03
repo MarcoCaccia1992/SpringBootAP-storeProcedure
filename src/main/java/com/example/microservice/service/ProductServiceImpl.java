@@ -29,9 +29,9 @@ public class ProductServiceImpl implements ProductService{
 
     //come chiamare una stored procedure da SpringBootApp con parametri
     @Override
-    public String insertNewProduct(String name_product, Integer code_product) {
+    public String insertNewProduct(String name_product, Integer code_product, Integer fk_shop) {
 
-        productsUtils.sp_insertProductsCheckId(name_product, code_product);
+        productsUtils.sp_insertProductsCheckId(name_product, code_product, fk_shop);
 
         List<ProductsEntity> allProducts = allProducts();
         ProductsEntity pe = productsUtils.getLastProduct(allProducts);
@@ -71,10 +71,9 @@ public class ProductServiceImpl implements ProductService{
 
         ProductsEntity productBeforeUpdate = findProductById(id_product);
         productsUtils.sp_updateProducts(id_product, name_product, code_product);
-        ProductsEntity productsEntityAfterUpdate = findProductById(id_product);
 
         return "You've already updated PRODUCT --> FROM:\n" + productBeforeUpdate.getName_product() + "\n" + productBeforeUpdate.getCode_product() + "\n" +
-                "-->TO:\n" + productsEntityAfterUpdate.getName_product() + "\n" + productsEntityAfterUpdate.getCode_product();
+                "-->TO:\n" + name_product + "\n" + code_product;
 
     }
 

@@ -1,7 +1,9 @@
 package com.example.microservice.controller;
 
 import com.example.microservice.entity.ProductsEntity;
+import com.example.microservice.entity.ShopsEntity;
 import com.example.microservice.service.ProductServiceImpl;
+import com.example.microservice.utils.ShopsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -32,9 +34,10 @@ public class ProductsController {
 
     @PostMapping(value = "/newProduct", produces = MediaType.APPLICATION_JSON_VALUE)
     public String insertNewProduct(@RequestParam("name_product")String name_product,
-                                   @RequestParam("code_product")Integer code_product){
+                                   @RequestParam("code_product")Integer code_product,
+                                   @RequestParam("fk_shop")Integer fk_shop){
 
-        return productServiceImpl.insertNewProduct(name_product, code_product);
+        return productServiceImpl.insertNewProduct(name_product, code_product, fk_shop);
     }
 
     @PostMapping(value = "/findProductById", produces = MediaType.APPLICATION_JSON_VALUE)
