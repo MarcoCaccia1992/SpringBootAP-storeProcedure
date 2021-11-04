@@ -1,7 +1,9 @@
 package com.example.microservice.service;
 
+import com.example.microservice.DTO.ShopsDTO;
 import com.example.microservice.entity.ProductsEntity;
 import com.example.microservice.repository.ProductsRepository;
+import com.example.microservice.repository.ShopsRepository;
 import com.example.microservice.utils.ProductsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,8 +18,9 @@ public class ProductServiceImpl implements ProductService{
     private ProductsRepository productsRepository;
     private ProductsUtils productsUtils;
 
+
     @Autowired
-    public ProductServiceImpl(ProductsRepository productsRepository, ProductsUtils productsUtils){
+    public ProductServiceImpl(ProductsRepository productsRepository, ProductsUtils productsUtils, ShopsRepository shopsRepository){
         this.productsRepository = productsRepository;
         this.productsUtils = productsUtils;
     }
@@ -36,7 +39,7 @@ public class ProductServiceImpl implements ProductService{
         List<ProductsEntity> allProducts = allProducts();
         ProductsEntity pe = productsUtils.getLastProduct(allProducts);
 
-        return "Perfect, you've already insert into DB:\n" + pe.getId_product() + "\n" + pe.getName_product() + "\n" + pe.getCode_product();
+        return "Perfect, you've already insert into DB:\n" + "\n" +  pe.getId_product() + "\n" + pe.getName_product() + "\n" + pe.getCode_product();
     }
 
     @Override

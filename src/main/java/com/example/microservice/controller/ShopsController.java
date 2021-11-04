@@ -27,6 +27,7 @@ public class ShopsController {
 
 
 
+
     @GetMapping(value = "/getAllShops", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ShopsDTO> getAllShops(){
 

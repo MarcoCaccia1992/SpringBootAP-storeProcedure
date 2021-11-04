@@ -1,5 +1,6 @@
 package com.example.microservice.controller;
 
+import com.example.microservice.DTO.ShopsDTO;
 import com.example.microservice.entity.ProductsEntity;
 import com.example.microservice.entity.ShopsEntity;
 import com.example.microservice.service.ProductServiceImpl;

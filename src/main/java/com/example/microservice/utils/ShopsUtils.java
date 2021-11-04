@@ -1,7 +1,6 @@
 package com.example.microservice.utils;
 
 import com.example.microservice.DTO.ShopsDTO;
-import com.example.microservice.entity.ProductsEntity;
 import com.example.microservice.entity.ShopsEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -68,6 +67,8 @@ public class ShopsUtils {
 
         return sortedShops;
     }
+
+
 
 
 
