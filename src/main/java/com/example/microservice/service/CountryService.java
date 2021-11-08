@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public interface CountryService {
 
-    public String insertNewCountry(String Country);
+    public String insertNewCountry(String Country, String acronym_shop);
 
     public List<CountriesEntity> allCountries();
 

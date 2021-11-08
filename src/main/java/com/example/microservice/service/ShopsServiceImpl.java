@@ -42,11 +42,11 @@ public class ShopsServiceImpl implements ShopsService{
     }
 
     @Override
-    public String insertNewShop(String name_shop) {
+    public String insertNewShop(String name_shop, String region_code) {
 
-        shopsUtils.sp_insertShopsCheckId(name_shop);
+        shopsUtils.sp_insertShopsCheckId(name_shop, region_code);
         List<ShopsEntity> allShopsUpdated = shopsRepository.findAll();
-        ShopsEntity lastShop = shopsUtils.getLastShop(allShopsUpdated);
+        ShopsEntity lastShop = shopsUtils.getLastShop(allShopsUpdated); // inserire altra logica del shopsUtils
 
         return "You've already insert:\n" + "ID_SHOP: " + lastShop.getId_shop() + "\n" + "NAME_SHOP: " + lastShop.getName_shop();
     }

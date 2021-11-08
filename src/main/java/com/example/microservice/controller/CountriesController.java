@@ -32,9 +32,11 @@ public class CountriesController {
     }
 
     @PostMapping(value = "/newCountry", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String insertNewCountry(@RequestParam("name_country")String name_country){
+    public String insertNewCountry(@RequestParam("name_country")String name_country,
+                                   @RequestParam("acronym_shop")String acronym_shop){
 
-        return countryServiceImpl.insertNewCountry(name_country);
+        String result = countryServiceImpl.insertNewCountry(name_country, acronym_shop);
+        return result;
     }
 
 }

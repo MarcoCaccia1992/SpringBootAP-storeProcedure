@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
 import javax.persistence.StoredProcedureQuery;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -35,11 +36,13 @@ public class CountriesUtils {
 //-----------------------------------------------STORED-PROCEDURE-----------------------------------------------
 
 
-    public void sp_insertCountriesCheckId(String name_country){
+    public void sp_insertCountriesCheckId(String name_country, String acronym_shop){
 
         StoredProcedureQuery spQueryInsertCountryCheckId= entityManager.createStoredProcedureQuery("sp_insertCountriesCheckId")
                 .registerStoredProcedureParameter(1, String.class, ParameterMode.IN)
-                .setParameter(1, name_country);
+                .registerStoredProcedureParameter(2, String.class, ParameterMode.IN)
+                .setParameter(1, name_country)
+                .setParameter(2, acronym_shop);
 
         spQueryInsertCountryCheckId.execute();
     }
@@ -78,6 +81,7 @@ public class CountriesUtils {
 
         return sortedCountries;
     }
+
 
 
 

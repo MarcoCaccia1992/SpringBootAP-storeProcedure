@@ -30,9 +30,9 @@ public class CountryServiceImpl implements CountryService{
 
 
     @Override
-    public String insertNewCountry(String name_country) {
+    public String insertNewCountry(String name_country, String acronym_shop) {
 
-        countriesUtils.sp_insertCountriesCheckId(name_country);
+        countriesUtils.sp_insertCountriesCheckId(name_country, acronym_shop);
 
         List<CountriesEntity> allCountries = allCountries();
         CountriesEntity ce = countriesUtils.getLastCountry(allCountries);
