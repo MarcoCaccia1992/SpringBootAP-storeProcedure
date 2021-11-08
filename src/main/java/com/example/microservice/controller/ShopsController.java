@@ -3,7 +3,6 @@ package com.example.microservice.controller;
 import com.example.microservice.DTO.InnerJoinShopsProductsClassDTO;
 import com.example.microservice.DTO.InnerJoinShopsProductsInterfaceDTO;
 import com.example.microservice.DTO.ShopsDTO;
-import com.example.microservice.entity.ShopsEntity;
 import com.example.microservice.service.ShopsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -20,7 +19,6 @@ public class ShopsController {
     @Autowired
     public ShopsController(ShopsServiceImpl shopsServiceImpl){
         this.shopsServiceImpl = shopsServiceImpl;
-
     }
 
 
@@ -48,9 +46,9 @@ public class ShopsController {
         return res;
     }
 
-    @PostMapping(value = "/insertNewShop", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/newShop", produces = MediaType.APPLICATION_JSON_VALUE)
     public String insertNewShop(@RequestParam("name_shop")String name_shop){
 
-        return shopsServiceImpl.insertNewShop(name_shop);
+         return shopsServiceImpl.insertNewShop(name_shop);
     }
 }

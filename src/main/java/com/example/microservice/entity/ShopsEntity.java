@@ -19,7 +19,11 @@ public class ShopsEntity {
     @Column(name="name_shop")
     private String name_shop;
 
+    @Column(name="region_code")
+    private String region_code;
+
     @OneToMany(targetEntity = ProductsEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_shop", referencedColumnName = "id_shop")
     private List<ProductsEntity> productsEntityList;
+
 }

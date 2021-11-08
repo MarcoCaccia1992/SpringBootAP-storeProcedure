@@ -30,18 +30,25 @@ public class ShopsServiceImpl implements ShopsService{
 
 
     public List<InnerJoinShopsProductsInterfaceDTO> getJoinShopsProductsNATIVEQUERY(){
+
         List<InnerJoinShopsProductsInterfaceDTO> result = shopsRepository.resultInnerJoinNATIVE();
         return result;
     }
 
     public List<InnerJoinShopsProductsClassDTO> getJoinShopsProductsJPQL(){
+
         List<InnerJoinShopsProductsClassDTO> result = shopsRepository.resultInnerJoinJPQL();
         return result;
     }
 
     @Override
     public String insertNewShop(String name_shop) {
-        return null;
+
+        shopsUtils.sp_insertShopsCheckId(name_shop);
+        List<ShopsEntity> allShopsUpdated = shopsRepository.findAll();
+        ShopsEntity lastShop = shopsUtils.getLastShop(allShopsUpdated);
+
+        return "You've already insert:\n" + "ID_SHOP: " + lastShop.getId_shop() + "\n" + "NAME_SHOP: " + lastShop.getName_shop();
     }
 
     @Override

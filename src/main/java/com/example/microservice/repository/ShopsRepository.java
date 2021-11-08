@@ -28,7 +28,7 @@ public interface ShopsRepository extends JpaRepository<ShopsEntity, Integer> {
                    "FROM ShopsEntity s JOIN s.productsEntityList p ORDER BY s.name_shop")
     public List<InnerJoinShopsProductsClassDTO> resultInnerJoinJPQL();
 
-    @Query(value = "SELECT new com.example.microservice.DTO.ShopsDTO(s.id_shop, s.name_shop)" +
+    @Query(value = "SELECT new com.example.microservice.DTO.ShopsDTO(s.id_shop, s.name_shop, s.region_code)" +
                    "FROM ShopsEntity s ORDER BY s.name_shop")
     public List<ShopsDTO> getAllShopsWithoutJoin();
 

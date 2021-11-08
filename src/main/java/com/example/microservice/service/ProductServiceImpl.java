@@ -39,7 +39,7 @@ public class ProductServiceImpl implements ProductService{
         List<ProductsEntity> allProducts = allProducts();
         ProductsEntity pe = productsUtils.getLastProduct(allProducts);
 
-        return "Perfect, you've already insert into DB:\n" + "\n" +  pe.getId_product() + "\n" + pe.getName_product() + "\n" + pe.getCode_product();
+        return "Perfect, you've already insert into DB:\n" + "ID_PRODUCT: " +  pe.getId_product() + "\n" + "NAME_PRODUCT: " + pe.getName_product() + "\n" + "CODE_PRODUCT: " + pe.getCode_product();
     }
 
     @Override

@@ -10,4 +10,5 @@ public class ShopsDTO {
 
     private Integer id_shop;
     private String name_shop;
+    private String region_code;
 }
