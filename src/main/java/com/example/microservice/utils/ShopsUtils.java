@@ -3,7 +3,7 @@ package com.example.microservice.utils;
 import com.example.microservice.DTO.ShopsDTO;
 import com.example.microservice.entity.CountriesEntity;
 import com.example.microservice.entity.ShopsEntity;
-import com.example.microservice.repository.ShopsRepository;
+import com.example.microservice.mapper.MappingUtils;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,9 +21,12 @@ public class ShopsUtils {
     @PersistenceContext
     private EntityManager entityManager;
 
+    private MappingUtils mappingUtils;
+
     @Autowired
-    public ShopsUtils(EntityManager entityManager) {
+    public ShopsUtils(EntityManager entityManager, MappingUtils mappingUtils) {
         this.entityManager = entityManager;
+        this.mappingUtils = mappingUtils;
     }
 
 
@@ -53,6 +56,35 @@ public class ShopsUtils {
     }
 
 
+//---------------------------------------------QUERY-ENTITYMANAGER---------------------------------------------
+
+
+    public List<ShopsEntity> getAllShopsEntityListUpdated() {
+
+        List<ShopsEntity> seList = new ArrayList<>();
+        try {
+            Query q = entityManager.createQuery("SELECT s FROM ShopsEntity s");// sintassi corretta della normale SELECT * FROM tabl
+            seList = q.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return seList;
+    }
+
+    public List<CountriesEntity> getAllCountriesEntityListUpdated() {
+
+        List<CountriesEntity> ceList = new ArrayList<>();
+        try {
+            Query q = entityManager.createQuery("SELECT c FROM CountriesEntity c");
+            ceList = q.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ceList;
+    }
+
+
+
 //-----------------------------------------------BUSINESS-LOGIC------------------------------------------------
 
 
@@ -61,6 +93,18 @@ public class ShopsUtils {
         ShopsEntity seResult = new ShopsEntity();
         for (int i = 0; i < allShops.size(); i++) {
             if (i == allShops.size() - 1) {
+                seResult = allShops.get(i);
+            }
+        }
+
+        return seResult;
+    }
+
+    public ShopsEntity getFirstShop(List<ShopsEntity> allShops) {
+
+        ShopsEntity seResult = new ShopsEntity();
+        for (int i = 0; i < allShops.size(); i++) {
+            if (i == 0) {
                 seResult = allShops.get(i);
             }
         }
@@ -101,18 +145,6 @@ public class ShopsUtils {
         return sortedShops;
     }
 
-    public List<ShopsEntity> getAllShopsEntityListUpdated() {
-
-        List<ShopsEntity> seList = new ArrayList<>();
-        try {
-            Query q = entityManager.createQuery("SELECT s FROM ShopsEntity s");// sintassi corretta della normale SELECT * FROM tabl
-            seList = q.getResultList();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return seList;
-    }
-
     public ShopsEntity checkRegionCodeAndJoinShop(String name_shop, String region_code) {
 
         ShopsEntity se = new ShopsEntity();
@@ -122,43 +154,32 @@ public class ShopsUtils {
             if (region_code.equalsIgnoreCase("lo")) {
                 //set the check String at corresponding RegionNAme
                 compareRegionCodeWithRegionName = "Lombardia";
-                //create empty list to populate with DB countries table's data
-                List<CountriesEntity> allCountriesBeforeUpdate = new ArrayList<>();
-                //get all countries datas in to the list
-                try {
-                    Query q = entityManager.createQuery("SELECT c FROM CountriesEntity c");
-                    allCountriesBeforeUpdate = q.getResultList();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
+                //create empty list to populate with DB countries table's data and get all countries datas in to the list
+                List<CountriesEntity> allCountriesBeforeUpdate = getAllCountriesEntityListUpdated();
                 //insert a new check, if RegionName is not present on DB, i create new Object to save into DB
                 if (!ifAlreadyPresent(compareRegionCodeWithRegionName, allCountriesBeforeUpdate)) {
                     // create another Object to find the record where the country name it's like to "compareRegionCodeWithRegionName"
-                    CountriesEntity CEbyNameCountry = getCountryByNameCountryFromSP(allCountriesBeforeUpdate, compareRegionCodeWithRegionName);// possibile errore perchè devo creare l'oggetto con il campo preso, in questo caso "Lombardia"
+                    CountriesEntity CEbyNameCountry = getCountryByNameCountryFromSP(allCountriesBeforeUpdate, compareRegionCodeWithRegionName);
                     //populate the first countries Object and check if hte ID is alredy present or not
                     if(CEbyNameCountry.getId_country() == null || CEbyNameCountry.getId_country() == 0 || CEbyNameCountry == null){
-                        ce.setId_country(1);
-                        ce.setName_country("Lombardia");
-                        ce.setAcronym_shop("GDO");
+                        ce = mappingUtils.getMappedCountriesEntity(1, "Lombardia", "GDO");
 
                         sp_insertCountriesCheckId(ce.getName_country(), ce.getAcronym_shop());
                     }
-                    if(ifAlreadyPresent(compareRegionCodeWithRegionName, allCountriesBeforeUpdate) && CEbyNameCountry != null){// continuare da qui per gestire la nullpointer nel caso ci sia o non ci sia il campo in countries.
-                        ce = CEbyNameCountry;
+                    if(ifAlreadyPresent(compareRegionCodeWithRegionName, allCountriesBeforeUpdate) && CEbyNameCountry != null){
+                        ce = mappingUtils.getMappedCountriesEntity(CEbyNameCountry.getId_country(), CEbyNameCountry.getName_country(), CEbyNameCountry.getAcronym_shop());
                     }
 
                     List<ShopsEntity> shopsEntityListBeforeUpdate = getAllShopsEntityListUpdated();
                     ShopsEntity lastShopBeforeUpdate = getLastShop(shopsEntityListBeforeUpdate);
                     //and create populate new Shop Object with the ManyToMany join and insert all into DB + check if exist
                     if(lastShopBeforeUpdate != null) {
-                        se.setId_shop(lastShopBeforeUpdate.getId_shop() + 1);
+                        se = mappingUtils.getMappedShopsEntity(lastShopBeforeUpdate.getId_shop() + 1, name_shop, region_code);
+                        se.addCountryToShop(ce);
                     }else{
-                        se.setId_shop(1);
+                        se = mappingUtils.getMappedShopsEntity(1, name_shop, region_code);
+                        se.addCountryToShop(ce);
                     }
-                    se.setName_shop(name_shop);
-                    se.setRegion_code(region_code);
-                    se.addCountryToShop(ce);
 
                 }else{
                     // if already present the Country Object i create Shop Object only and insert that on DB
@@ -166,30 +187,22 @@ public class ShopsUtils {
                     ShopsEntity lastShopBeforeUpdate = getLastShop(shopsEntityListBeforeUpdate);
 
                     if(lastShopBeforeUpdate.getId_shop() == null || lastShopBeforeUpdate.getId_shop() == 0 ){
-                        se.setId_shop(1);
+                        se = mappingUtils.getMappedShopsEntity(1, name_shop, region_code);
+
                     }else {
-                        se.setId_shop(lastShopBeforeUpdate.getId_shop() + 1);
+                        se = mappingUtils.getMappedShopsEntity(lastShopBeforeUpdate.getId_shop() + 1, name_shop, region_code);
                     }
 
-                    //create empty list to populate with DB countries table's data
-                    List<CountriesEntity> allCountriesBeforeUpdate1 = new ArrayList<>();
-                    //get all countries datas in to the list
-                    try {
-                        Query q = entityManager.createQuery("SELECT c FROM CountriesEntity c");
-                        allCountriesBeforeUpdate1 = q.getResultList();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    //create empty list to populate with DB countries table's data and get all countries datas in to the list
+                    List<CountriesEntity> allCountriesBeforeUpdate1 = getAllCountriesEntityListUpdated();
 
                     CountriesEntity ce1 = getLastCountryFromSP(allCountriesBeforeUpdate1);
-
-                    se.setName_shop(name_shop);
-                    se.setRegion_code(region_code);
                     se.addCountryToShop(ce1);
 
                 }
             }
         }
+        //checckare l'id maggiore perchè mette l'id non ordinato e prende il secondo +1 fa 3 e sovrascrive cazzo!
 
         return se;
     }

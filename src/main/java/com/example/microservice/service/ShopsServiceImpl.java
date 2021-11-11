@@ -52,7 +52,7 @@ public class ShopsServiceImpl implements ShopsService{
             shopsRepository.save(seToInsertIntoDB);
         }
         List<ShopsEntity> allShopsUpdated = shopsRepository.findAll();
-        ShopsEntity lastShopSaved = shopsUtils.getLastShop(allShopsUpdated);
+        ShopsEntity lastShopSaved = shopsUtils.getFirstShop(allShopsUpdated);
 
         return "You've already insert:\n" + "ID_SHOP: " + lastShopSaved.getId_shop() + "\n" + "NAME_SHOP: " + lastShopSaved.getName_shop();
     }
