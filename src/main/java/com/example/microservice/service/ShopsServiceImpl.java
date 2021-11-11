@@ -52,7 +52,7 @@ public class ShopsServiceImpl implements ShopsService{
             shopsRepository.save(seToInsertIntoDB);
         }
         List<ShopsEntity> allShopsUpdated = shopsRepository.findAll();
-        ShopsEntity lastShopSaved = shopsUtils.getFirstShop(allShopsUpdated);
+        ShopsEntity lastShopSaved = shopsUtils.getLastShop(allShopsUpdated);
 
         return "You've already insert:\n" + "ID_SHOP: " + lastShopSaved.getId_shop() + "\n" + "NAME_SHOP: " + lastShopSaved.getName_shop();
     }
@@ -62,7 +62,7 @@ public class ShopsServiceImpl implements ShopsService{
 
         List<ShopsDTO> result = new ArrayList<>();
         result = shopsRepository.getAllShopsWithoutJoin();
-        result = shopsUtils.orderListShopsByIdSTREAM(result);
+        result = shopsUtils.orderListShopsDTOByIdSTREAM(result);
         return result;
     }
 }

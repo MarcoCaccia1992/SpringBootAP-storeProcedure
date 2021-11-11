@@ -136,10 +136,19 @@ public class ShopsUtils {
         return ceResult;
     }
 
-    public List<ShopsDTO> orderListShopsByIdSTREAM(List<ShopsDTO> list) {
+    public List<ShopsDTO> orderListShopsDTOByIdSTREAM(List<ShopsDTO> list) {
 
         List<ShopsDTO> sortedShops = list.stream()
                 .sorted(Comparator.comparing(ShopsDTO::getId_shop)/*.reversed()*/)
+                .collect(Collectors.toList());
+
+        return sortedShops;
+    }
+
+    public List<ShopsEntity> orderListShopsEntityByIdSTREAM(List<ShopsEntity> list) {
+
+        List<ShopsEntity> sortedShops = list.stream()
+                .sorted(Comparator.comparing(ShopsEntity::getId_shop)/*.reversed()*/)
                 .collect(Collectors.toList());
 
         return sortedShops;
@@ -171,6 +180,7 @@ public class ShopsUtils {
                     }
 
                     List<ShopsEntity> shopsEntityListBeforeUpdate = getAllShopsEntityListUpdated();
+                    shopsEntityListBeforeUpdate = orderListShopsEntityByIdSTREAM(shopsEntityListBeforeUpdate);
                     ShopsEntity lastShopBeforeUpdate = getLastShop(shopsEntityListBeforeUpdate);
                     //and create populate new Shop Object with the ManyToMany join and insert all into DB + check if exist
                     if(lastShopBeforeUpdate != null) {
@@ -184,6 +194,7 @@ public class ShopsUtils {
                 }else{
                     // if already present the Country Object i create Shop Object only and insert that on DB
                     List<ShopsEntity> shopsEntityListBeforeUpdate = getAllShopsEntityListUpdated();
+                    shopsEntityListBeforeUpdate = orderListShopsEntityByIdSTREAM(shopsEntityListBeforeUpdate);
                     ShopsEntity lastShopBeforeUpdate = getLastShop(shopsEntityListBeforeUpdate);
 
                     if(lastShopBeforeUpdate.getId_shop() == null || lastShopBeforeUpdate.getId_shop() == 0 ){
@@ -202,7 +213,6 @@ public class ShopsUtils {
                 }
             }
         }
-        //checckare l'id maggiore perchè mette l'id non ordinato e prende il secondo +1 fa 3 e sovrascrive cazzo!
 
         return se;
     }
