@@ -3,7 +3,6 @@ package com.example.microservice.service;
 import com.example.microservice.DTO.InnerJoinShopsProductsClassDTO;
 import com.example.microservice.DTO.InnerJoinShopsProductsInterfaceDTO;
 import com.example.microservice.DTO.ShopsDTO;
-import com.example.microservice.entity.ProductsEntity;
 import com.example.microservice.entity.ShopsEntity;
 import com.example.microservice.repository.ShopsRepository;
 import com.example.microservice.utils.ShopsUtils;
@@ -44,11 +43,18 @@ public class ShopsServiceImpl implements ShopsService{
     @Override
     public String insertNewShop(String name_shop, String region_code) {
 
-        shopsUtils.sp_insertShopsCheckId(name_shop, region_code);
+        if(region_code == null) {
+            region_code = "NOT ITALY REGION";
+            shopsUtils.sp_insertShopsCheckId(name_shop, region_code);
+        }
+        if(region_code != null){
+            ShopsEntity seToInsertIntoDB = shopsUtils.checkRegionCodeAndJoinShop(name_shop, region_code);
+            shopsRepository.save(seToInsertIntoDB);
+        }
         List<ShopsEntity> allShopsUpdated = shopsRepository.findAll();
-        ShopsEntity lastShop = shopsUtils.getLastShop(allShopsUpdated); // inserire altra logica del shopsUtils
+        ShopsEntity lastShopSaved = shopsUtils.getLastShop(allShopsUpdated);
 
-        return "You've already insert:\n" + "ID_SHOP: " + lastShop.getId_shop() + "\n" + "NAME_SHOP: " + lastShop.getName_shop();
+        return "You've already insert:\n" + "ID_SHOP: " + lastShopSaved.getId_shop() + "\n" + "NAME_SHOP: " + lastShopSaved.getName_shop();
     }
 
     @Override
