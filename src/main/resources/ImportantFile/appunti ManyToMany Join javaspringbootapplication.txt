@@ -1,0 +1,109 @@
+ 
+ ESEMPIO DI GESTIONE DELLA MANY TO MANY ALL'INTERNO DI UN PROGETTO JAVA UTILIZZANDO SPRING COME FRAMEWORK
+ 
+	La prima classe che si crea, che è anche una entity, si chiama "Shops" la quale avrà anche le annotation @Entity e @Table(name="shops"),
+	il che significa che Spring, dovendo gestire le connessioni a DB tramite unfile di configurazioni chiemato "application.properties" o
+	"application.yml" a seconda della scelta del programmatore, sarà in grado di riconoscere la classe come entità ed avrà al suo interno tutti
+	i campi con le annotation @Column(name = "nome_colonna") come da esempio che segue:
+	
+	@Table(name="shops")
+	@Entity
+	@NoArgsConstructor  ----> Lombok
+	@AllArgsConstructor ----> Lombok
+	@Data ----> Lombok
+	@ToString ----> Lombok
+	public class ShopsEntity {
+
+		@Id
+		@Column(name="id_shop")
+		private Integer id_shop;
+
+		@Column(name="name_shop")
+		private String name_shop;
+
+		@Column(name="region_code")
+		private String region_code;
+	}
+	
+	da notare che Lombok è una libreria che permette con poche righe come si vede di evitare ToString(), Getter and Setter() e i vari costruttori per 
+	una pulizia di codice.
+	Dopo di che si crea crea il costruttore solo, in questo caso, con "name_shop" e "region_code" come segue:
+	
+	public ShopsEntity(String name_shop, String region_code){
+        this.name_shop = name_shop;
+        this.region_code = region_code;
+    }
+	
+	poi, si crea una una lista di "CountriesEntity", ovvero la seconda entity al quale fare riferimento come segue:
+	
+	private List<CountriesEntity> countryToShop = new ArrayList<>();
+	
+	dopo di che crea un metodo semplcie dove in input passa uno "CountriesEntity" e lo aggiunge lo nella lista.
+	
+	A questo punto crea l'altra entità "CountriesEntity", e dentro si crea una lista di "ShopsEntity" ed anche 
+	crea il costruttore solo con tutti i cmapi trane l'ID come segue:
+	
+	@Table(name="countries")
+	@Entity
+	@NoArgsConstructor
+	@AllArgsConstructor
+	@Data
+	@ToString
+	public class CountriesEntity {
+
+		@Id
+		@Column(name="id_country")
+		private Integer id_country;
+
+		@Column(name="name_country")
+		private String name_country;
+
+		@Column(name="acronym_shop")
+		private String acronym_shop;
+
+		public CountriesEntity(String name_country, String acronym_shop){
+
+			this.name_country = name_country;
+			this.acronym_shop = acronym_shop;
+		}
+	}
+	
+	dopo di che crea un semplice metodo dove in input vuole un oggetto "ShopsEntity" e lo aggiunge alla lista
+	come segue: 
+	
+	public void addShopToCountry(ShopsEntity shopsEntity){
+
+        shopToCountry.add(shopsEntity);
+    }
+	
+	ed infine la lista di "ShopsEntity" come segue:
+	
+	private List<ShopsEntity> shopToCountry = new ArrayList<>();
+	
+	FATTO QUESTO SI DEVE PROCEDERE CON L'AGGIUTNA DELL'ANNOTATION @ManyToMany la quale una volta inserita con i corretti parmaetri
+	andrà a creare a runtime una tabella con due primarykey al suo interno collegate appunto con le primarykey delle due entità in 
+	questo caso "ShopsEntity" e "CountriesEntity" collegandole così come tabella i appoggio.... come segue:
+	
+	si entra nella classe "ShopsEntity" e sopra la lista "countryToShop" mette l'annotation @ManyToMany mappedby = "shopToCountry" --> la lista della
+	classe "CountriesEntity".
+	
+	A questo si entra nella classe "ShopsEntity" e si mette la annotation @ManyToMany con i seguenti parametri
+	@JoinTable(
+		name = "country_shop_join_mtm,   --> nome della tabella che verrà creata a runtime
+		joinColumns = @JoinColumn(name = "shop_id"), -> nome della colonna che verrà creta a runtime
+		inverseJoinClumn = @JoinColumn(name = "country_id") -> nome della seconda tabella che verrà creata a runtime
+	)
+	
+	dopo aver fattio ciò si entrerà nella cseconda entity "CountriesEntity" e sulla lista si aggiungerà l'nnotation @ManyToMany come segue:
+	
+	// mappata dalla tabella per aggiungere l'oggetto all'interno della tabella SHOPS dentro ShopsEntity
+    @ManyToMany(mappedBy = "countryToShop") --> mappata tramite la lista della entity "ShopsEntity"
+    private List<ShopsEntity> shopToCountry = new ArrayList<>();
+	
+	INFINE SI CREANO DELLE REPO PER LE DUE ENTITA' SEMPLICI, ESTENDENDO "JpaRepository" e creare poi LE BUSINESSLOGIC TALI PER CUI QUANDO CREIAMO UN OGGETTO
+	ShopsEntity E UN OGETTO CountiesEntity E VERRANNO SALVATI RICORDARSI DI SALVARE L'OGGETTO CountiresEntity ALL'INTERO DEL METODO CREATO PER AGGIUNGERLO
+	ALLA LISTA E VICEVERSA DI MODO DA POPOLARE LA TABLLA DI APPOGGIO PER POI RICHIAMARLA E VEDERE I VARI LINK TRA OGGETTI
+	
+	
+	
+	

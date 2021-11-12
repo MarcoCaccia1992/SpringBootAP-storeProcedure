@@ -25,6 +25,15 @@ public class ShopsEntity {
     @Column(name="region_code")
     private String region_code;
 
+    public ShopsEntity(String name_shop, String region_code){
+        this.name_shop = name_shop;
+        this.region_code = region_code;
+    }
+
+    public void addCountryToShop(CountriesEntity countriesEntity){
+        countryToShop.add(countriesEntity);
+    }
+
     /* in questo caso la ManyToMany fa da riferimento alla classe CountryEntity come mappatura
     * per i cmapi e non l'annotation @JoinTable gli si danno i riferimenti per la tablle che dovrà
     * cotruire a runtime con le DUE FOREIGNKEY per urine le due tabelle
@@ -36,15 +45,6 @@ public class ShopsEntity {
             inverseJoinColumns = @JoinColumn(name = "id_country")
     )
     private List<CountriesEntity> countryToShop = new ArrayList<>();
-
-    public ShopsEntity(String name_shop, String region_code){
-        this.name_shop = name_shop;
-        this.region_code = region_code;
-    }
-
-    public void addCountryToShop(CountriesEntity countriesEntity){
-        countryToShop.add(countriesEntity);
-    }
 
     @OneToMany(targetEntity = ProductsEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_shop", referencedColumnName = "id_shop")

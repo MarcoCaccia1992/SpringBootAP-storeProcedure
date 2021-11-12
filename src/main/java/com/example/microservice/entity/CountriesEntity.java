@@ -25,10 +25,6 @@ public class CountriesEntity {
     @Column(name="acronym_shop")
     private String acronym_shop;
 
-    // mappata dalla tabella per aggiungere l'oggetto all'interno della tabella SHOPS dentro ShopsEntity
-    @ManyToMany(mappedBy = "countryToShop")
-    private List<ShopsEntity> shopToCountry = new ArrayList<>();
-
     public CountriesEntity(String name_country, String acronym_shop){
 
         this.name_country = name_country;
@@ -39,6 +35,12 @@ public class CountriesEntity {
 
         shopToCountry.add(shopsEntity);
     }
+
+    // mappata dalla tabella per aggiungere l'oggetto all'interno della tabella SHOPS dentro ShopsEntity
+    @ManyToMany(mappedBy = "countryToShop")
+    private List<ShopsEntity> shopToCountry = new ArrayList<>();
+
+
 
 
 }
