@@ -54,4 +54,13 @@ public class ShopsController {
          String result = shopsServiceImpl.insertNewShop(name_shop, region_code);
          return result;
     }
+
+    @PutMapping(value = "/updateShop", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String updateShop(@RequestParam("id_shop")Integer id_shop,
+                             @RequestParam("name_shop")String name_shop,
+                             @RequestParam("region_code")String region_code){
+
+        String result = shopsServiceImpl.updateShop(id_shop, name_shop, region_code);
+        return result;
+    }
 }

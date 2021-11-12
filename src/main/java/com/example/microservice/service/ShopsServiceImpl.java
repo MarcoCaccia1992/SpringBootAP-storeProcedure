@@ -44,11 +44,27 @@ public class ShopsServiceImpl implements ShopsService{
     public String insertNewShop(String name_shop, String region_code) {
 
         if(region_code == null) {
-            region_code = "NOT ITALY REGION";
+            region_code = "NOT ITALY REGION_CODE present on DB";
             shopsUtils.sp_insertShopsCheckId(name_shop, region_code);
         }
-        if(region_code != null){
-            ShopsEntity seToInsertIntoDB = shopsUtils.checkRegionCodeAndJoinShop(name_shop, region_code);
+        if(region_code != null && region_code.equalsIgnoreCase("ve")){ // Veneto
+            ShopsEntity seToInsertIntoDB = shopsUtils.checkRegionCodeAndJoinShopVE(name_shop, region_code);
+            shopsRepository.save(seToInsertIntoDB);
+        }
+        if(region_code != null && region_code.equalsIgnoreCase("bs")){ // Basilicata
+            ShopsEntity seToInsertIntoDB = shopsUtils.checkRegionCodeAndJoinShopBS(name_shop, region_code);
+            shopsRepository.save(seToInsertIntoDB);
+        }
+        if(region_code != null && region_code.equalsIgnoreCase("pu")){ // Puglia
+            ShopsEntity seToInsertIntoDB = shopsUtils.checkRegionCodeAndJoinShopPU(name_shop, region_code);
+            shopsRepository.save(seToInsertIntoDB);
+        }
+        if(region_code != null && region_code.equalsIgnoreCase("ca")){ // Calabria
+            ShopsEntity seToInsertIntoDB = shopsUtils.checkRegionCodeAndJoinShopCA(name_shop, region_code);
+            shopsRepository.save(seToInsertIntoDB);
+        }
+        if(region_code != null && region_code.equalsIgnoreCase("lo")){ // Lombardia
+            ShopsEntity seToInsertIntoDB = shopsUtils.checkRegionCodeAndJoinShopLO(name_shop, region_code);
             shopsRepository.save(seToInsertIntoDB);
         }
         List<ShopsEntity> allShopsUpdated = shopsRepository.findAll();
@@ -63,6 +79,42 @@ public class ShopsServiceImpl implements ShopsService{
         List<ShopsDTO> result = new ArrayList<>();
         result = shopsRepository.getAllShopsWithoutJoin();
         result = shopsUtils.orderListShopsDTOByIdSTREAM(result);
+        return result;
+    }
+
+    @Override
+    public String updateShop(Integer id_shop, String name_shop, String region_code) {
+
+        ShopsEntity seBeforeUpdate = shopsUtils.getShopById(id_shop);
+        shopsUtils.updateShopAndCheckRegionCode(id_shop, name_shop, region_code);
+
+        String RegionCodeNotNUll = "You've already Updated\n" +
+                "SHOP_ID: " + seBeforeUpdate.getId_shop() + "\n" +
+                "NAME_SHOP: " + seBeforeUpdate.getName_shop() + "\n" +
+                "REGION_CODE: " + seBeforeUpdate.getRegion_code() + "\n" +
+                "\n-----INTO-----\n" +
+                "\nSHOP_ID: " + id_shop + "\n" +
+                "NAME_SHOP: " + name_shop + "\n" +
+                "REGION_CODE: " + region_code;
+
+        String RegionCodeNUll = "You've already Updated\n" +
+                "SHOP_ID: " + seBeforeUpdate.getId_shop() + "\n" +
+                "NAME_SHOP: " + seBeforeUpdate.getName_shop() + "\n" +
+                "REGION_CODE: " + seBeforeUpdate.getRegion_code() + "\n" +
+                "\n-----INTO-----\n" +
+                "\nSHOP_ID: " + id_shop + "\n" +
+                "NAME_SHOP: " + name_shop + "\n" +
+                "REGION_CODE: " + seBeforeUpdate.getRegion_code();
+
+        String result = null;
+
+        if(region_code == null || region_code.isEmpty()){
+            result = RegionCodeNUll;
+
+        }else{
+           result = RegionCodeNotNUll;
+        }
+
         return result;
     }
 }
