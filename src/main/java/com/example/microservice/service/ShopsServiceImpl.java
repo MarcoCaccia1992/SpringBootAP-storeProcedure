@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ShopsServiceImpl implements ShopsService{
@@ -38,6 +39,13 @@ public class ShopsServiceImpl implements ShopsService{
 
         List<InnerJoinShopsProductsClassDTO> result = shopsRepository.resultInnerJoinJPQL();
         return result;
+    }
+
+    public ShopsEntity getShopById(Integer id_shop){
+
+        Optional<ShopsEntity> se = shopsRepository.findById(id_shop);
+        ShopsEntity seOBJ = se.get();
+        return seOBJ;
     }
 
     @Override
@@ -83,10 +91,13 @@ public class ShopsServiceImpl implements ShopsService{
     }
 
     @Override
-    public String updateShop(Integer id_shop, String name_shop, String region_code) {
+    public String updateShopBySP(Integer id_shop, String name_shop, String region_code) {
 
         ShopsEntity seBeforeUpdate = shopsUtils.getShopById(id_shop);
-        shopsUtils.updateShopAndCheckRegionCode(id_shop, name_shop, region_code);
+        ShopsEntity seAfterUpdate = shopsUtils.updateShopAndCheckRegionCode(id_shop, name_shop, region_code);
+        if(seAfterUpdate.getRegion_code() != seBeforeUpdate.getRegion_code()){
+            shopsRepository.save(seAfterUpdate);
+        }
 
         String RegionCodeNotNUll = "You've already Updated\n" +
                 "SHOP_ID: " + seBeforeUpdate.getId_shop() + "\n" +
@@ -116,5 +127,13 @@ public class ShopsServiceImpl implements ShopsService{
         }
 
         return result;
+    }
+
+    @Override
+    public String updateShopByQUERY(Integer id_shop, String name_shop, String region_code) {
+
+        shopsRepository.updateShopNATIVE(id_shop, name_shop, region_code);
+        return "you've already updated\n" +
+                "SHOP_ID: " + id_shop + " SUCCESSFULLY!";
     }
 }

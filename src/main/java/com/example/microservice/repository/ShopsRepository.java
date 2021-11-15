@@ -6,6 +6,7 @@ import com.example.microservice.DTO.ShopsDTO;
 import com.example.microservice.entity.ShopsEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,10 +16,10 @@ public interface ShopsRepository extends JpaRepository<ShopsEntity, Integer> {
 
     /* custom query example -->
     https://stackoverflow.com/questions/52591535/spring-jpa-no-converter-found-capable-of-converting-from-type*/
-    @Query(value = "select shops.name_shop as nameShop, products.name_product as nameProduct\n" +
-            "    from shops\n" +
-            "    inner join products on shops.id_shop = products.fk_shop\n" +
-            "    order  by shops.name_shop", nativeQuery = true)
+    @Query(value = "SELECT shops.name_shop AS nameShop, products.name_product AS nameProduct\n" +
+            "    FROM shops\n" +
+            "    INNER JOIN products ON shops.id_shop = products.fk_shop\n" +
+            "    ORDER  BY shops.name_shop", nativeQuery = true)
     public List<InnerJoinShopsProductsInterfaceDTO> resultInnerJoinNATIVE();
 
 
@@ -31,5 +32,11 @@ public interface ShopsRepository extends JpaRepository<ShopsEntity, Integer> {
     @Query(value = "SELECT new com.example.microservice.DTO.ShopsDTO(s.id_shop, s.name_shop, s.region_code)" +
                    "FROM ShopsEntity s ORDER BY s.name_shop")
     public List<ShopsDTO> getAllShopsWithoutJoin();
+
+    @Query(value = "UPDATE ShopsEntity s SET s.name_shop := name_shop, " +
+            "s.region_code := region_code  WHERE s.id_shop := id_shop", nativeQuery = true)
+    public String  updateShopNATIVE(@Param("id_shop")Integer id_shop,
+                                    @Param("name_shop")String name_shop,
+                                    @Param("region_code")String region_code);
 
 }

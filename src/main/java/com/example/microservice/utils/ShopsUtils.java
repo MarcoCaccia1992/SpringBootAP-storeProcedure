@@ -7,12 +7,9 @@ import com.example.microservice.mapper.MappingUtils;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpClientErrorException;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -157,6 +154,9 @@ public class ShopsUtils {
         for (int i = 0; i < allCountries.size(); i++) {
             if (allCountries.get(i).getName_country().equalsIgnoreCase(country_name)) {
                 ceResult = allCountries.get(i);
+
+            }else{
+                ceResult = null;
             }
         }
 
@@ -187,7 +187,7 @@ public class ShopsUtils {
         boolean exit = false;
         regionCodeList.add("VE");
         regionCodeList.add("BS");
-        regionCodeList.add("FE");
+        regionCodeList.add("PU");
         regionCodeList.add("CA");
         regionCodeList.add("LO");
 
@@ -198,6 +198,74 @@ public class ShopsUtils {
         }
 
         return exit;
+    }
+
+    public CountriesEntity createNewCountryByRegionCode(String region_code){
+
+        CountriesEntity ce = new CountriesEntity();
+        String checkRegion = null;
+        if(region_code.equalsIgnoreCase("ve")){
+            checkRegion = "Venezia";
+            // get all countries already present on DB
+            List<CountriesEntity> ceList = getAllCountriesEntityListUpdated();
+            // return object by region_name parameter
+            CountriesEntity ceIfAlreadyExist = getCountryByNameCountryFromSU(ceList, checkRegion);
+            if(ceIfAlreadyExist != null) {
+                ce = mappingUtils.getMappedCountriesEntity(ceIfAlreadyExist.getId_country() +1, checkRegion, "GDO");
+            }else{
+                ce = mappingUtils.getMappedCountriesEntity(1, "Venezia", "GDO");
+            }
+        }
+        if(region_code.equalsIgnoreCase("bs")){
+            checkRegion = "Basilicata";
+            // get all countries already present on DB
+            List<CountriesEntity> ceList = getAllCountriesEntityListUpdated();
+            // return object by region_name parameter
+            CountriesEntity ceIfAlreadyExist = getCountryByNameCountryFromSU(ceList, checkRegion);
+            if(ceIfAlreadyExist != null) {
+                ce = mappingUtils.getMappedCountriesEntity(ceIfAlreadyExist.getId_country() +1, checkRegion, "GDO");
+            }else{
+                ce = mappingUtils.getMappedCountriesEntity(1, checkRegion, "GDO");
+            }
+        }
+        if(region_code.equalsIgnoreCase("pu")){
+            checkRegion = "Puglia";
+            // get all countries already present on DB
+            List<CountriesEntity> ceList = getAllCountriesEntityListUpdated();
+            // return object by region_name parameter
+            CountriesEntity ceIfAlreadyExist = getCountryByNameCountryFromSU(ceList, checkRegion);
+            if(ceIfAlreadyExist != null) {
+                ce = mappingUtils.getMappedCountriesEntity(ceIfAlreadyExist.getId_country() +1, checkRegion, "GDO");
+            }else{
+                ce = mappingUtils.getMappedCountriesEntity(1, checkRegion, "GDO");
+            }
+        }
+        if(region_code.equalsIgnoreCase("ca")){
+            checkRegion = "Calabria";
+            // get all countries already present on DB
+            List<CountriesEntity> ceList = getAllCountriesEntityListUpdated();
+            // return object by region_name parameter
+            CountriesEntity ceIfAlreadyExist = getCountryByNameCountryFromSU(ceList, checkRegion);
+            if(ceIfAlreadyExist != null) {
+                ce = mappingUtils.getMappedCountriesEntity(ceIfAlreadyExist.getId_country() +1, checkRegion, "GDO");
+            }else{
+                ce = mappingUtils.getMappedCountriesEntity(1, checkRegion, "GDO");
+            }
+        }
+        if(region_code.equalsIgnoreCase("lo")){
+            checkRegion = "Lombardia";
+            // get all countries already present on DB
+            List<CountriesEntity> ceList = getAllCountriesEntityListUpdated();
+            // return object by region_name parameter
+            CountriesEntity ceIfAlreadyExist = getCountryByNameCountryFromSU(ceList, checkRegion);
+            if(ceIfAlreadyExist != null) {
+                ce = mappingUtils.getMappedCountriesEntity(ceIfAlreadyExist.getId_country() +1, checkRegion, "GDO");
+            }else{
+                ce = mappingUtils.getMappedCountriesEntity(1, checkRegion, "GDO");
+            }
+        }
+
+        return ce;
     }
 
     public boolean ifAlreadyPresent(String name_country, List<CountriesEntity> allCountries) {
@@ -537,19 +605,33 @@ public class ShopsUtils {
         return se;
     }
 
-    public void updateShopAndCheckRegionCode(Integer id_shop, String name_shop, String region_code){
+    public Map<String, Object> updateShopAndCheckRegionCode(Integer id_shop, String name_shop, String region_code){
 
         ShopsEntity seBeforeUpdate = getShopById(id_shop);
-
+        ShopsEntity seToUpdate = new ShopsEntity();
+        Map<String, Object> resultMap = new HashMap<>();
         if(region_code == null || region_code.isEmpty()){
             sp_updateShops(id_shop, name_shop, seBeforeUpdate.getRegion_code());
 
-        }else{ // aggiungere logica tale per cui se il codice regionale cambia deve cambiare anche il puntamento della relazione ManyToMany nella tabella di appoggio
-              // quindi poi controllare che l'oggetto country esiste già con il region_code passato se no crearlo, salvarlo e poi passarlo come parametro del metodo che salva
-             //  nella lista della ManyToMany
-            sp_updateShops(id_shop, name_shop, region_code);
-        }
+        }else{
+            if(seBeforeUpdate.getRegion_code() != region_code && checkRegionCodeList(region_code)){
+                CountriesEntity ce = createNewCountryByRegionCode(region_code);
+                // da vedere se con la save lo sovrascrive possibile erroe
+                seToUpdate = getShopById(id_shop);
+                seToUpdate.setRegion_code(region_code);
+                seToUpdate.addCountryToShop(ce);
+                resultMap.put("shop", seToUpdate);
+                resultMap.put("country", ce);
 
+            }else{
+                sp_updateShops(id_shop, name_shop, region_code);
+                seToUpdate.setId_shop(id_shop);
+                seToUpdate.setName_shop(name_shop);
+                seToUpdate.setRegion_code(region_code);
+                resultMap.put("shop", seToUpdate);
+            }
+        }
+        return resultMap;
     }
 
 

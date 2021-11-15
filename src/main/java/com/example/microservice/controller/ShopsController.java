@@ -60,7 +60,7 @@ public class ShopsController {
                              @RequestParam("name_shop")String name_shop,
                              @RequestParam("region_code")String region_code){
 
-        String result = shopsServiceImpl.updateShop(id_shop, name_shop, region_code);
+        String result = shopsServiceImpl.updateShopBySP(id_shop, name_shop, region_code);
         return result;
     }
 }

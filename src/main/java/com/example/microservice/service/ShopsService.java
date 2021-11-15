@@ -11,6 +11,8 @@ public interface ShopsService {
 
     public List<ShopsDTO> getAllShopsWithoutJoin();
 
-    public String updateShop(Integer id_shop, String name_shop, String region_code);
+    public String updateShopBySP(Integer id_shop, String name_shop, String region_code);
+
+    public String updateShopByQUERY(Integer id_shop, String name_shop, String region_code);
 
 }
