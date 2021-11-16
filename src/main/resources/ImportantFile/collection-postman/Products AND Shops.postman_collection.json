@@ -1,0 +1,354 @@
+{
+	"info": {
+		"_postman_id": "23b1ab62-1b8c-45c8-bc17-8d6393948553",
+		"name": "Products AND Shops",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8081/insertNewProduct?name_product&code_product",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/products/newProduct?name_product=Test&code_product=000003&fk_shop=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"products",
+						"newProduct"
+					],
+					"query": [
+						{
+							"key": "name_product",
+							"value": "Test"
+						},
+						{
+							"key": "code_product",
+							"value": "000003"
+						},
+						{
+							"key": "fk_shop",
+							"value": "2"
+						}
+					]
+				},
+				"description": "save new product from StroeProcedure ORACLE DML"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8081/products/allProducts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/products/allProducts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"products",
+						"allProducts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8090/products/findById?id_product",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/products/findProductById?id_product=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"products",
+						"findProductById"
+					],
+					"query": [
+						{
+							"key": "id_product",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8090/products/deleteAndOrderById?id_product=2",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/products/deleteAndOrderProductById?id_product=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"products",
+						"deleteAndOrderProductById"
+					],
+					"query": [
+						{
+							"key": "id_product",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8090/products/deleteAndOrderById?id_product=2&name_product=Dececco Spaghetti N/&code_product=111032",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/products/updateAllDataProductById?id_product=2&name_product=Dececco Spaghetti N/19&code_product=111033",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"products",
+						"updateAllDataProductById"
+					],
+					"query": [
+						{
+							"key": "id_product",
+							"value": "2"
+						},
+						{
+							"key": "name_product",
+							"value": "Dececco Spaghetti N/19"
+						},
+						{
+							"key": "code_product",
+							"value": "111033"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8090/products/updateDataProductCheckNULLById?id_product&name_product&code_product",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/products/updateDataProductCheckNULLById?id_product=3&name_product&code_product=111100",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"products",
+						"updateDataProductCheckNULLById"
+					],
+					"query": [
+						{
+							"key": "id_product",
+							"value": "3"
+						},
+						{
+							"key": "name_product",
+							"value": null
+						},
+						{
+							"key": "code_product",
+							"value": "111100"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8090/shops/getInnerJoinShopsProductsNATIVEQUERY",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/shops/getInnerJoinShopsProductsNATIVEQUERY",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"shops",
+						"getInnerJoinShopsProductsNATIVEQUERY"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8090/shops/getInnerJoinShopsProductsJPQL",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/shops/getInnerJoinShopsProductsJPQL",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"shops",
+						"getInnerJoinShopsProductsJPQL"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8090/shops/getAllShops",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/shops/getAllShops",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"shops",
+						"getAllShops"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8090/shops/newShop?name_shop=Torri Bianche",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/shops/newShop?name_shop=Esselunga&region_code=pu",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"shops",
+						"newShop"
+					],
+					"query": [
+						{
+							"key": "name_shop",
+							"value": "Esselunga"
+						},
+						{
+							"key": "region_code",
+							"value": "pu"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8090/countries/newCountry?name_country=testCountry2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/countries/newCountry?name_country=country4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"countries",
+						"newCountry"
+					],
+					"query": [
+						{
+							"key": "name_country",
+							"value": "country4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8090/countries/allCountry",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/countries/allCountry",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"countries",
+						"allCountry"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8090/shops/updsteShop?id_shop=TestPerIlNomeSovrascritto5&name_shop=lo&region_code",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/shops/updateShop?id_shop=8&name_shop=PUGLIA_TEST&region_code=pu",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"shops",
+						"updateShop"
+					],
+					"query": [
+						{
+							"key": "id_shop",
+							"value": "8"
+						},
+						{
+							"key": "name_shop",
+							"value": "PUGLIA_TEST"
+						},
+						{
+							"key": "region_code",
+							"value": "pu"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
