@@ -1,0 +1,14 @@
+
+    BREVE DESCRIZIONE DI GIT:
+
+        git è un sistema di versionamento il quale non possiede i file fisici del progetto ma solo i riferimenti posizionali dei file stessi, di modo da essere veloce ed
+        efficiente perchè qual'ora avesse i file fisici occuperebbero memoria e renderebbe anche i seplici spostamenti dei file molto complesso.
+        In più questo tool permette di essere usato da comando temrinale anche tramite gli ide di programmazione per staccare branch, prendere modifiche, revertarle, tenere le modifiche
+        in pending, allineare branch e così via....
+
+        maggiori informazioni ai seguenti link:
+
+           https://git-scm.com/video/what-is-version-control
+           https://git-scm.com/video/what-is-git
+           https://git-scm.com/docs/git#_git_commands
+
