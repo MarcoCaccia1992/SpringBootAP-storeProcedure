@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/countries")
+@CrossOrigin("http://localhost:8080")
 public class CountriesController {
 
     private CountryServiceImpl countryServiceImpl;
