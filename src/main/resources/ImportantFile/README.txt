@@ -75,5 +75,12 @@
         NEL CASO VI SIA UN ERRORE DA GIT, sarà sicuramente un errore di connessione dei branch e nel caso seguire step per step i comandi che git in automatico darà da lanciare
         seguendo il loro ordine.
 
+        in caso di impossibiltà di PUSH eseguire questi comandi ignorando il primo qual'ora si sia già creato il proprio branch di lavoro
+
+        git branch -m develop <BRANCH>
+        git fetch origin
+        git branch -u origin/<BRANCH> <BRANCH>
+        git remote set-head origin -a
+
 
 	
