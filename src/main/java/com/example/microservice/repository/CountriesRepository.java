@@ -11,6 +11,7 @@ import java.util.List;
 @Repository
 public interface CountriesRepository extends JpaRepository<CountriesEntity, Integer> {
 
+    //JPQL
     @Query(value = "SELECT new com.example.microservice.DTO.CountriesDTO" +
             "(c.id_country, c.name_country, c.acronym_shop)" +
             "FROM CountriesEntity c ORDER BY c.name_country")

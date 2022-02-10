@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/countries")
-@CrossOrigin("http://localhost:8080")
+//@CrossOrigin("http://localhost:8080")
 public class CountriesController {
 
     private CountryServiceImpl countryServiceImpl;
@@ -26,7 +26,7 @@ public class CountriesController {
 
 
 
-    @GetMapping(value = "/allCountry", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/allCountries", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<CountriesDTO> allCountries(){
 
         return countryServiceImpl.getAllCountriesWithoutJoin();
