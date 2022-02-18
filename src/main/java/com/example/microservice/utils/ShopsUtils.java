@@ -492,7 +492,7 @@ public class ShopsUtils {
                     shopsEntityListBeforeUpdate = orderListShopsEntityByIdSTREAM(shopsEntityListBeforeUpdate);
                     ShopsEntity lastShopBeforeUpdate = getLastShop(shopsEntityListBeforeUpdate);
 
-                    if(lastShopBeforeUpdate.getId_shop() == null || lastShopBeforeUpdate.getId_shop() == 0 ){
+                    if(lastShopBeforeUpdate == null || lastShopBeforeUpdate.getId_shop() == null || lastShopBeforeUpdate.getId_shop() == 0){
                         se = mappingUtils.getMappedShopsEntity(1, name_shop, region_code);
 
                     }else{
