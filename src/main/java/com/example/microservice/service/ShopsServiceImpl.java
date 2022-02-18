@@ -151,4 +151,12 @@ public class ShopsServiceImpl implements ShopsService{
         return "you've already updated\n" +
                 "SHOP_ID: " + id_shop + " SUCCESSFULLY!";
     }
+
+    @Override
+    public String deleteShopByIdSP(Integer id_shop) {
+
+        ShopsEntity deletedShop = shopsUtils.getShopById(id_shop);
+        shopsUtils.sp_deleteShopsById(id_shop);
+        return "you've deleted the follow shop: \n" + deletedShop.getId_shop() + "\n" + deletedShop.getName_shop() + "\n" + deletedShop.getRegion_code();
+    }
 }

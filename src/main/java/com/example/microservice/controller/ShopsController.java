@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/shops")
-@CrossOrigin("http://localhost:8080")
+@CrossOrigin("http://localhost:4200")
 public class ShopsController {
 
     private ShopsServiceImpl shopsServiceImpl;
@@ -28,7 +28,7 @@ public class ShopsController {
 
 
 
-    @GetMapping(value = "/getAllShops", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/allShops", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ShopsDTO> getAllShops(){
 
         return shopsServiceImpl.getAllShopsWithoutJoin();
@@ -56,12 +56,27 @@ public class ShopsController {
          return result;
     }
 
-    @PutMapping(value = "/updateShop", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String updateShop(@RequestParam("id_shop")Integer id_shop,
+    @PutMapping(value = "/updateShopSP", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String updateShopSP(@RequestParam("id_shop")Integer id_shop,
                              @RequestParam("name_shop")String name_shop,
                              @RequestParam("region_code")String region_code){
 
         String result = shopsServiceImpl.updateShopBySP(id_shop, name_shop, region_code);
         return result;
+    }
+
+    @PutMapping(value = "/updateShopQUERY", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String updateShopQUERY(@RequestParam("id_shop")Integer id_shop,
+                             @RequestParam("name_shop")String name_shop,
+                             @RequestParam("region_code")String region_code){
+
+        shopsServiceImpl.updateShopByQUERY(id_shop, name_shop, region_code);
+        return "you've alredy updeated your shop: \n" + id_shop + "\n" + name_shop + "\n" + region_code;
+    }
+
+    @DeleteMapping(value = "/deleteShopByIdSP", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String deleteShopByIdSP(@RequestParam("id_shop")Integer id_shop){
+
+        return shopsServiceImpl.deleteShopByIdSP(id_shop);
     }
 }

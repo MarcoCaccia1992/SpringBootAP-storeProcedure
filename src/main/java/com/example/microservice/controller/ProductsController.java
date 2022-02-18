@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/products")
-@CrossOrigin("http://localhost:8080")
+@CrossOrigin("http://localhost:4200")
 public class ProductsController {
 
     private ProductServiceImpl productServiceImpl;
@@ -49,13 +49,6 @@ public class ProductsController {
         return "Your ID is:\n" + peRes.getId_product() + "\n" + peRes.getName_product() + "\n" +peRes.getCode_product();
     }
 
-   @DeleteMapping(value = "/deleteAndOrderProductById", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ProductsEntity> deleteAndOrderProductById(@RequestParam("id_product")Integer id_product){
-
-       List<ProductsEntity> resultProductsList = productServiceImpl.deleteAndOrderProductsByIDs(id_product);
-        return resultProductsList;
-    }
-
     @PutMapping(value = "/updateAllDataProductById", produces = MediaType.APPLICATION_JSON_VALUE)
     public String updateAllProductsDataById(@RequestParam("id_product")Integer id_product,
                                     @RequestParam("name_product")String name_product,
@@ -74,11 +67,11 @@ public class ProductsController {
         return productServiceImpl.updateProductsDataByIdCheckNULL(id_product, name_product, code_product);
     }
 
+    @DeleteMapping(value = "/deleteAndOrderProductById", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ProductsEntity> deleteAndOrderProductById(@RequestParam("id_product")Integer id_product){
 
+        List<ProductsEntity> resultProductsList = productServiceImpl.deleteAndOrderProductsByIDs(id_product);
+        return resultProductsList;
+    }
 
-
-    /*TO DO
-    JOIN UNO TO MANY
-    E DTO VARI
-     */
 }

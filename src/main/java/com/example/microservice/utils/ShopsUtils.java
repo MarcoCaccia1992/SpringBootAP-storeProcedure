@@ -67,6 +67,15 @@ public class ShopsUtils {
         spQueryInsertCountryCheckId.execute();
     }
 
+    public void sp_deleteShopsById(Integer id_shop) {
+
+        StoredProcedureQuery spQueryDeleteById = entityManager.createStoredProcedureQuery("sp_deleteShops")
+                .registerStoredProcedureParameter(1, Integer.class, ParameterMode.IN)
+                .setParameter(1, id_shop);
+
+        spQueryDeleteById.execute();
+    }
+
 
 //---------------------------------------------QUERY-ENTITYMANAGER---------------------------------------------
 
