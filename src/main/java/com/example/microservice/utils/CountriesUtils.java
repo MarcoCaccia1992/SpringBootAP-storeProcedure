@@ -46,7 +46,36 @@ public class CountriesUtils {
 
         spQueryInsertCountryCheckId.execute();
     }
+    public void sp_updateCountryById(Integer id_country, String name_country, String acronym_shop){
 
+        StoredProcedureQuery spQueryUpdateCountryById= entityManager.createStoredProcedureQuery("sp_updateCountries")
+                .registerStoredProcedureParameter(1, Integer.class, ParameterMode.IN)
+                .registerStoredProcedureParameter(2, String.class, ParameterMode.IN)
+                .registerStoredProcedureParameter(3, String.class, ParameterMode.IN)
+                .setParameter(1, id_country)
+                .setParameter(2, name_country)
+                .setParameter(3, acronym_shop);
+
+        spQueryUpdateCountryById.execute();
+    }
+
+    public void sp_deleteCountryById(Integer id_country){
+
+        StoredProcedureQuery spQueryDeleteCountryById= entityManager.createStoredProcedureQuery("sp_deleteCountries")
+                .registerStoredProcedureParameter(1, Integer.class, ParameterMode.IN)
+                .setParameter(1, id_country);
+
+        spQueryDeleteCountryById.execute();
+    }
+
+    public void sp_orderCountryById(Integer id_country){
+
+        StoredProcedureQuery spQueryOrderCountryById= entityManager.createStoredProcedureQuery("sp_orderCountriesIDS")
+                .registerStoredProcedureParameter(1, Integer.class, ParameterMode.IN)
+                .setParameter(1, id_country);
+
+        spQueryOrderCountryById.execute();
+    }
 
 //------------------------------------------------BUSINESS-LOGIC------------------------------------------------
 

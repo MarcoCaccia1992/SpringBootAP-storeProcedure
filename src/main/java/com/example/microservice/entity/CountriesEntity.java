@@ -37,7 +37,7 @@ public class CountriesEntity {
     }
 
     // mappata dalla tabella per aggiungere l'oggetto all'interno della tabella SHOPS dentro ShopsEntity
-    @ManyToMany(mappedBy = "countryToShop")
+    @ManyToMany(mappedBy = "countryToShop", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<ShopsEntity> shopToCountry = new ArrayList<>();
 
 

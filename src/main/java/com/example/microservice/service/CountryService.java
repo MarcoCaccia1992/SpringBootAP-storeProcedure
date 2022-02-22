@@ -16,4 +16,7 @@ public interface CountryService {
 
     public List<CountriesDTO> getAllCountriesWithoutJoin();
 
+    String updateCountry(Integer id_country, String name_country, String acronym_shop);
+
+    String deleteCountryById(Integer id_country);
 }

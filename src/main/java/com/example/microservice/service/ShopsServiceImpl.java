@@ -157,6 +157,7 @@ public class ShopsServiceImpl implements ShopsService{
 
         ShopsEntity deletedShop = shopsUtils.getShopById(id_shop);
         shopsUtils.sp_deleteShopsById(id_shop);
+        shopsUtils.sp_orderShopsById(id_shop);
         return "you've deleted the follow shop: \n" + deletedShop.getId_shop() + "\n" + deletedShop.getName_shop() + "\n" + deletedShop.getRegion_code();
     }
 }

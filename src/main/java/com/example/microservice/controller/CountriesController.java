@@ -36,8 +36,21 @@ public class CountriesController {
     public String insertNewCountry(@RequestParam("name_country")String name_country,
                                    @RequestParam("acronym_shop")String acronym_shop){
 
-        String result = countryServiceImpl.insertNewCountry(name_country, acronym_shop);
-        return result;
+        return countryServiceImpl.insertNewCountry(name_country, acronym_shop);
+    }
+
+    @PutMapping(value = "/updateCountry", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String updateCountryById(@RequestParam("id_country")Integer id_country,
+                                    @RequestParam("name_country")String name_country,
+                                    @RequestParam("acronym_shop")String acronym_shop){
+
+        return countryServiceImpl.updateCountry(id_country,name_country,acronym_shop);
+    }
+
+    @DeleteMapping(value = "/deleteCountry", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String deleteCountryById(@RequestParam("id_country")Integer id_country){
+
+        return countryServiceImpl.deleteCountryById(id_country);
     }
 
 }
