@@ -40,11 +40,9 @@ public class CountriesController {
     }
 
     @PutMapping(value = "/updateCountry", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String updateCountryById(@RequestParam("id_country")Integer id_country,
-                                    @RequestParam("name_country")String name_country,
-                                    @RequestParam("acronym_shop")String acronym_shop){
+    public String updateCountryById(@RequestBody CountriesDTO dto){
 
-        return countryServiceImpl.updateCountry(id_country,name_country,acronym_shop);
+        return countryServiceImpl.updateCountry(dto.getId_country(),dto.getName_country(),dto.getAcronym_shop());
     }
 
     @DeleteMapping(value = "/deleteCountry", produces = MediaType.APPLICATION_JSON_VALUE)
