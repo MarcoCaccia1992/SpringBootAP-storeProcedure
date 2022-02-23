@@ -16,6 +16,28 @@
                 Important-File
                     SqlDeveloper
 
+        N.B
+            quando si crea una tabella come in questo caso con delle join oneToMany, ManyToMany o ManyToOne ricordarsi di inserire, nella creazione della tablle l'istruzione per cui
+            si specifica che nella cancellazione di un record della suddetta tabella questa dovrà poi a CASCATA cancellare l'id corrispondente nella tabella nella quale effetua la join
+             come da esempio:
+
+                --------------------------- creazione tabelle EXAMPLE -----------------------------
+
+                 CREATE TABLE "NOME_DB"."EXAMPLE"
+                    (	"ID_EXAMPLE" NUMBER(4,0) NOT NULL ENABLE,
+                 	"NAME_EXAMPLE" VARCHAR2(40 BYTE) NOT NULL ENABLE,
+                 	"FK_EXAMPLE" NUMBER(4,0), --> foreign key di esempio che servirà al collegamento con una seconda tabella
+                 	 PRIMARY KEY ("ID_EXAMPLE")
+                 	 CONSTRAINT "FK_EXAMPLE" FOREIGN KEY ("FK_EXAMPLE")  --> creazione della costraint di riferimento sempre per la seconda tabella
+                 	  REFERENCES "NOME_DB"."SECONDA_TABELLA_PER_JOIN" ("ID_SECONDA_TABELLA_PER_JOIN") ON DELETE CASCADE ENABLE --> istruzione che permette la cancellazione di record senza violare la "costraint"
+                    ) SEGMENT CREATION IMMEDIATE
+                   PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+                   STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+                   PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+                   TABLESPACE "SYSTEM" ;
+
+                -----------------------------------------------------------------------------------
+
     TERZO STEP:
 
         3.1

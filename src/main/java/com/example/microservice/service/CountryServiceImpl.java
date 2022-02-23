@@ -81,10 +81,8 @@ public class CountryServiceImpl implements CountryService{
     public String deleteCountryById(Integer id_country) {
 
         Optional<CountriesEntity> countriesDeleted = countriesRepository.findById(id_country);
-        // joinUtils.sp_deleteFrom_country_shop_join_mtm(id_country);
         countriesUtils.sp_deleteCountryById(id_country);
         countriesUtils.sp_orderCountryById(id_country);
-        //countriesRepository.deleteById(id_country);
         return "You've already deleted: \n" +
                 countriesDeleted.get().getId_country() + "\n" +
                 countriesDeleted.get().getName_country() + "\n" +
