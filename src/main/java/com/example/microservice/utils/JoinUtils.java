@@ -1,12 +1,11 @@
 package com.example.microservice.utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.EntityManager;
-import javax.persistence.ParameterMode;
-import javax.persistence.PersistenceContext;
-import javax.persistence.StoredProcedureQuery;
+import javax.persistence.*;
+import javax.transaction.Transactional;
 
 @Component
 public class JoinUtils {
@@ -32,5 +31,16 @@ public class JoinUtils {
                 .setParameter(1, id_country);
 
         spQueryDeleteFrom_country_shop_join_mtm.execute();
+    }
+
+    @Transactional
+    @Modifying
+    public void queryToDeleteRecordMTMBYId(String column , Integer id_to_delete){
+
+        Query test =  entityManager.createNativeQuery("DELETE FROM country_shop_join_mtm WHERE "
+                + id_to_delete + " IN (SELECT " + column + " FROM country_shop_join_mtm WHERE "
+                + column + " = " + id_to_delete + ")");
+        test.executeUpdate();
+
     }
 }

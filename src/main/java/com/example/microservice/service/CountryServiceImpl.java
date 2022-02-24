@@ -23,9 +23,10 @@ public class CountryServiceImpl implements CountryService{
     private JoinUtils joinUtils;
 
     @Autowired
-    public CountryServiceImpl(CountriesRepository countriesRepository, CountriesUtils countriesUtils){
+    public CountryServiceImpl(CountriesRepository countriesRepository, CountriesUtils countriesUtils, JoinUtils joinUtils){
         this.countriesRepository = countriesRepository;
         this.countriesUtils = countriesUtils;
+        this.joinUtils = joinUtils;
     }
 
 
@@ -34,7 +35,7 @@ public class CountryServiceImpl implements CountryService{
 
 
     @Override
-    public String insertNewCountry(String name_country, String acronym_shop) {
+    public String insertNewCountrySP(String name_country, String acronym_shop) {
 
         countriesUtils.sp_insertCountriesCheckId(name_country, acronym_shop);
 
@@ -66,7 +67,7 @@ public class CountryServiceImpl implements CountryService{
     }
 
     @Override
-    public String updateCountry(Integer id_country, String name_country, String acronym_shop) {
+    public String updateCountrySP(Integer id_country, String name_country, String acronym_shop) {
 
         Optional<CountriesEntity> countryBeforeUpdate= countriesRepository.findById(id_country);
         CountriesEntity countryBeforeUpdateOBJ = countryBeforeUpdate.get();
@@ -78,7 +79,7 @@ public class CountryServiceImpl implements CountryService{
     }
 
     @Override
-    public String deleteCountryById(Integer id_country) {
+    public String deleteAndOrderCountryByIdSP(Integer id_country) {
 
         Optional<CountriesEntity> countriesDeleted = countriesRepository.findById(id_country);
         countriesUtils.sp_deleteCountryById(id_country);
@@ -87,6 +88,11 @@ public class CountryServiceImpl implements CountryService{
                 countriesDeleted.get().getId_country() + "\n" +
                 countriesDeleted.get().getName_country() + "\n" +
                 countriesDeleted.get().getAcronym_shop();
+    }
+
+    public void deleteMTMbyID(String column, Integer id_to_delete){
+
+        joinUtils.queryToDeleteRecordMTMBYId(column, id_to_delete);
     }
 
 }

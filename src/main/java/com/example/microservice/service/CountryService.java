@@ -10,13 +10,13 @@ import java.util.List;
 @Service
 public interface CountryService {
 
-    public String insertNewCountry(String Country, String acronym_shop);
+    public String insertNewCountrySP(String Country, String acronym_shop);
 
     public List<CountriesEntity> allCountries();
 
     public List<CountriesDTO> getAllCountriesWithoutJoin();
 
-    String updateCountry(Integer id_country, String name_country, String acronym_shop);
+    String updateCountrySP(Integer id_country, String name_country, String acronym_shop);
 
-    String deleteCountryById(Integer id_country);
+    String deleteAndOrderCountryByIdSP(Integer id_country);
 }

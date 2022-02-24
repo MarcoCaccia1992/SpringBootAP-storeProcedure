@@ -32,7 +32,7 @@ public class ProductServiceImpl implements ProductService{
 
     //come chiamare una stored procedure da SpringBootApp con parametri
     @Override
-    public String insertNewProduct(String name_product, Integer code_product, Integer fk_shop) {
+    public String insertNewProductSP(String name_product, Integer code_product, Integer fk_shop) {
 
         productsUtils.sp_insertProductsCheckId(name_product, code_product, fk_shop);
 
@@ -60,7 +60,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public List<ProductsEntity> deleteAndOrderProductsByIDs(Integer id_product) {
+    public List<ProductsEntity> deleteAndOrderProductsByIDsSP(Integer id_product) {
 
         productsUtils.sp_deleteUsers(id_product);
         productsUtils.sp_orderProductsIDS(id_product);
@@ -70,7 +70,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public String updateAllProductsDataById(Integer id_product, String name_product, Integer code_product) {
+    public String updateAllProductsDataByIdSP(Integer id_product, String name_product, Integer code_product) {
 
         ProductsEntity productBeforeUpdate = findProductById(id_product);
         productsUtils.sp_updateProducts(id_product, name_product, code_product);
@@ -81,7 +81,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public String updateProductsDataByIdCheckNULL(Integer id_product, String name_product, Integer code_product) {
+    public String updateProductsDataByIdCheckNULLSP(Integer id_product, String name_product, Integer code_product) {
 
         ProductsEntity productBeforeUpdate = findProductById(id_product);
         productsUtils.sp_updateProductsCheckNull(id_product, name_product, code_product);

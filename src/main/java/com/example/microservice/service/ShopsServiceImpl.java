@@ -51,7 +51,7 @@ public class ShopsServiceImpl implements ShopsService{
     }
 
     @Override
-    public String insertNewShop(String name_shop, String region_code) {
+    public String insertNewShopSP(String name_shop, String region_code) {
 
         if(region_code == null) {
             region_code = "NOT ITALY REGION_CODE present on DB";

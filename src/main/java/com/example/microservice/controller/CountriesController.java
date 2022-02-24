@@ -1,7 +1,6 @@
 package com.example.microservice.controller;
 
 import com.example.microservice.DTO.CountriesDTO;
-import com.example.microservice.entity.CountriesEntity;
 import com.example.microservice.service.CountryServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -32,23 +31,33 @@ public class CountriesController {
         return countryServiceImpl.getAllCountriesWithoutJoin();
     }
 
-    @PostMapping(value = "/newCountry", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/newCountrySP", produces = MediaType.APPLICATION_JSON_VALUE)
     public String insertNewCountry(@RequestParam("name_country")String name_country,
                                    @RequestParam("acronym_shop")String acronym_shop){
 
-        return countryServiceImpl.insertNewCountry(name_country, acronym_shop);
+        return countryServiceImpl.insertNewCountrySP(name_country, acronym_shop);
     }
 
-    @PutMapping(value = "/updateCountry", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/updateCountrySP", produces = MediaType.APPLICATION_JSON_VALUE)
     public String updateCountryById(@RequestBody CountriesDTO dto){
 
-        return countryServiceImpl.updateCountry(dto.getId_country(),dto.getName_country(),dto.getAcronym_shop());
+        return countryServiceImpl.updateCountrySP(dto.getId_country(),dto.getName_country(),dto.getAcronym_shop());
     }
 
-    @DeleteMapping(value = "/deleteCountry", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/deleteCountrySP", produces = MediaType.APPLICATION_JSON_VALUE)
     public String deleteCountryById(@RequestParam("id_country")Integer id_country){
 
-        return countryServiceImpl.deleteCountryById(id_country);
+        return countryServiceImpl.deleteAndOrderCountryByIdSP(id_country);
     }
+
+    @DeleteMapping(value = "/deleteTEST", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String deleteCountryByIdTEST(@RequestParam("column")String column,
+                                      @RequestParam("id_to_delete")Integer id_to_delete){
+
+        countryServiceImpl.deleteMTMbyID(column, id_to_delete);
+        return "ok, test work's";
+    }
+
+
 
 }
