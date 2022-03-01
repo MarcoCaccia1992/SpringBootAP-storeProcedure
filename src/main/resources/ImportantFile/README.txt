@@ -94,6 +94,20 @@
 
     TROUBLE SHOOTING
 
+        Quando si crea un nuovo progetto si deve collegarlo alla repo di GIT, in questo caso e i comandi principali sono i seguenti:
+
+        	1) git init --> dalla cartella del progetto
+
+        	2) git add remote <url della repo>
+
+        	3) git remote set-url <nome branch remoto> + <url repo>
+
+        	4) git add *
+
+        	5) git commit -m + "messaggio da scrivere"
+
+        	6) git push / git push -u / git push -f
+
         NEL CASO VI SIA UN ERRORE DA GIT, sarà sicuramente un errore di connessione dei branch e nel caso seguire step per step i comandi che git in automatico darà da lanciare
         seguendo il loro ordine.
 
