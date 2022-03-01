@@ -82,17 +82,13 @@ public class CountryServiceImpl implements CountryService{
     public String deleteAndOrderCountryByIdSP(Integer id_country) {
 
         Optional<CountriesEntity> countriesDeleted = countriesRepository.findById(id_country);
+        joinUtils.queryToDeleteRecordMTMBYId("id_country", countriesDeleted.get().getId_country());
         countriesUtils.sp_deleteCountryById(id_country);
         countriesUtils.sp_orderCountryById(id_country);
         return "You've already deleted: \n" +
                 countriesDeleted.get().getId_country() + "\n" +
                 countriesDeleted.get().getName_country() + "\n" +
                 countriesDeleted.get().getAcronym_shop();
-    }
-
-    public void deleteMTMbyID(String column, Integer id_to_delete){
-
-        joinUtils.queryToDeleteRecordMTMBYId(column, id_to_delete);
     }
 
 }

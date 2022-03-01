@@ -56,11 +56,9 @@ public class ShopsController {
     }
 
     @PutMapping(value = "/updateShopSP", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String updateShopSP(@RequestParam("id_shop")Integer id_shop,
-                             @RequestParam("name_shop")String name_shop,
-                             @RequestParam("region_code")String region_code){
+    public String updateShopSP(@RequestBody ShopsDTO shopsDTO){
 
-        String result = shopsServiceImpl.updateShopBySP(id_shop, name_shop, region_code);
+        String result = shopsServiceImpl.updateShopBySP(shopsDTO.getId_shop(), shopsDTO.getName_shop(), shopsDTO.getRegion_code());
         return result;
     }
 
@@ -70,12 +68,12 @@ public class ShopsController {
                              @RequestParam("region_code")String region_code){
 
         shopsServiceImpl.updateShopByQUERY(id_shop, name_shop, region_code);
-        return "you've alredy updeated your shop: \n" + id_shop + "\n" + name_shop + "\n" + region_code;
+        return "you've already updated your shop: \n" + id_shop + "\n" + name_shop + "\n" + region_code;
     }
 
     @DeleteMapping(value = "/deleteShopByIdSP", produces = MediaType.APPLICATION_JSON_VALUE)
     public String deleteShopByIdSP(@RequestParam("id_shop")Integer id_shop){
 
-        return shopsServiceImpl.deleteShopByIdSP(id_shop);
+        return shopsServiceImpl.deleteShopAndOrderByIdSP(id_shop);
     }
 }

@@ -6,6 +6,7 @@ import com.example.microservice.DTO.ShopsDTO;
 import com.example.microservice.entity.CountriesEntity;
 import com.example.microservice.entity.ShopsEntity;
 import com.example.microservice.repository.ShopsRepository;
+import com.example.microservice.utils.JoinUtils;
 import com.example.microservice.utils.ShopsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,11 +21,13 @@ public class ShopsServiceImpl implements ShopsService{
 
     private ShopsUtils shopsUtils;
     private ShopsRepository shopsRepository;
+    private JoinUtils joinUtils;
 
     @Autowired
-    public ShopsServiceImpl(ShopsUtils shopsUtils, ShopsRepository shopsRepository){
+    public ShopsServiceImpl(ShopsUtils shopsUtils, ShopsRepository shopsRepository, JoinUtils joinUtils){
         this.shopsUtils = shopsUtils;
         this.shopsRepository = shopsRepository;
+        this.joinUtils = joinUtils;
     }
 
 
@@ -83,7 +86,7 @@ public class ShopsServiceImpl implements ShopsService{
         return "You've already insert:\n" + "ID_SHOP: " + lastShopSaved.getId_shop() + "\n"
                 + "NAME_SHOP: " + lastShopSaved.getName_shop() + "\n"
                 + "REGION_CODE: " + lastShopSaved.getRegion_code();
-    }
+    } // TO-DO METTERE TUTTO IN UNA LISTA PER CHECCARE DIRETTAMENTE SE PRESENTE O MENO....
 
     @Override
     public List<ShopsDTO> getAllShopsWithoutJoin() {
@@ -153,11 +156,15 @@ public class ShopsServiceImpl implements ShopsService{
     }
 
     @Override
-    public String deleteShopByIdSP(Integer id_shop) {
+    public String deleteShopAndOrderByIdSP(Integer id_shop) {
 
-        ShopsEntity deletedShop = shopsUtils.getShopById(id_shop);
+        ShopsEntity shopToDelete = shopsUtils.getShopById(id_shop);
+        joinUtils.queryToDeleteRecordMTMBYId("id_shop", shopToDelete.getId_shop());
+        //joinUtils.queryToDeleteRecordOTMShopProduct(shopToDelete.getId_shop()); // -->crere un metodo che controlla se dentro vi sono dei products con fk_shop valorizzato all'id dello shop corrispondente e nel caso cancellare
         shopsUtils.sp_deleteShopsById(id_shop);
         shopsUtils.sp_orderShopsById(id_shop);
-        return "you've deleted the follow shop: \n" + deletedShop.getId_shop() + "\n" + deletedShop.getName_shop() + "\n" + deletedShop.getRegion_code();
+        return "you've deleted the follow shop: \n" + shopToDelete.getId_shop() + "\n" + shopToDelete.getName_shop() + "\n" + shopToDelete.getRegion_code();
     }
+
+
 }

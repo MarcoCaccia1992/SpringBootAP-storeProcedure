@@ -39,23 +39,15 @@ public class CountriesController {
     }
 
     @PutMapping(value = "/updateCountrySP", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String updateCountryById(@RequestBody CountriesDTO dto){
+    public String updateCountryById(@RequestBody CountriesDTO countriesDTO){
 
-        return countryServiceImpl.updateCountrySP(dto.getId_country(),dto.getName_country(),dto.getAcronym_shop());
+        return countryServiceImpl.updateCountrySP(countriesDTO.getId_country(),countriesDTO.getName_country(),countriesDTO.getAcronym_shop());
     }
 
-    @DeleteMapping(value = "/deleteCountrySP", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/deleteCountrySP")
     public String deleteCountryById(@RequestParam("id_country")Integer id_country){
 
         return countryServiceImpl.deleteAndOrderCountryByIdSP(id_country);
-    }
-
-    @DeleteMapping(value = "/deleteTEST", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String deleteCountryByIdTEST(@RequestParam("column")String column,
-                                      @RequestParam("id_to_delete")Integer id_to_delete){
-
-        countryServiceImpl.deleteMTMbyID(column, id_to_delete);
-        return "ok, test work's";
     }
 
 

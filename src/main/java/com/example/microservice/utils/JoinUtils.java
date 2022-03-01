@@ -37,10 +37,19 @@ public class JoinUtils {
     @Modifying
     public void queryToDeleteRecordMTMBYId(String column , Integer id_to_delete){
 
-        Query test =  entityManager.createNativeQuery("DELETE FROM country_shop_join_mtm WHERE "
+        Query queryToDeleteRecordMTMBYId =  entityManager.createNativeQuery("DELETE FROM country_shop_join_mtm WHERE "
                 + id_to_delete + " IN (SELECT " + column + " FROM country_shop_join_mtm WHERE "
                 + column + " = " + id_to_delete + ")");
-        test.executeUpdate();
+        queryToDeleteRecordMTMBYId.executeUpdate();
+
+    }
+
+    @Transactional
+    @Modifying
+    public void queryToDeleteRecordOTMShopProduct(Integer id_to_delete){
+
+        Query queryToDeleteRecordOTMShopProduct =  entityManager.createNativeQuery("DELETE FROM products WHERE fk_shop = " + id_to_delete + ")");
+        queryToDeleteRecordOTMShopProduct.executeUpdate();
 
     }
 }
