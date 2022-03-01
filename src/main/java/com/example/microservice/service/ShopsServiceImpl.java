@@ -159,8 +159,7 @@ public class ShopsServiceImpl implements ShopsService{
     public String deleteShopAndOrderByIdSP(Integer id_shop) {
 
         ShopsEntity shopToDelete = shopsUtils.getShopById(id_shop);
-        joinUtils.queryToDeleteRecordMTMBYId("id_shop", shopToDelete.getId_shop());
-        //joinUtils.queryToDeleteRecordOTMShopProduct(shopToDelete.getId_shop()); // -->crere un metodo che controlla se dentro vi sono dei products con fk_shop valorizzato all'id dello shop corrispondente e nel caso cancellare
+        //joinUtils.queryToDeleteRecordMTMBYId("id_shop", shopToDelete.getId_shop());
         shopsUtils.sp_deleteShopsById(id_shop);
         shopsUtils.sp_orderShopsById(id_shop);
         return "you've deleted the follow shop: \n" + shopToDelete.getId_shop() + "\n" + shopToDelete.getName_shop() + "\n" + shopToDelete.getRegion_code();
