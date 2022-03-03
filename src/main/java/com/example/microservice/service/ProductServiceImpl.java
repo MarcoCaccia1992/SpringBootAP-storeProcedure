@@ -35,7 +35,6 @@ public class ProductServiceImpl implements ProductService{
     public String insertNewProductSP(String name_product, Integer code_product, Integer fk_shop) {
 
         productsUtils.sp_insertProductsCheckId(name_product, code_product, fk_shop);
-
         List<ProductsEntity> allProducts = allProducts();
         ProductsEntity pe = productsUtils.getLastProduct(allProducts);
 

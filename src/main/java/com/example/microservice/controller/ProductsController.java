@@ -47,12 +47,10 @@ public class ProductsController {
     }
 
     @PutMapping(value = "/updateAllDataProductByIdSP", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String updateAllProductsDataById(@RequestParam("id_product")Integer id_product,
-                                    @RequestParam("name_product")String name_product,
-                                    @RequestParam("code_product")Integer code_product){
+    public String updateAllProductsDataById(@RequestBody ProductsEntity productsEntity){
 
 
-        return productServiceImpl.updateAllProductsDataByIdSP(id_product, name_product, code_product);
+        return productServiceImpl.updateAllProductsDataByIdSP(productsEntity.getId_product(), productsEntity.getName_product(), productsEntity.getCode_product());
     }
 
     @PutMapping(value = "/updateDataProductCheckNULLByIdSP", produces = MediaType.APPLICATION_JSON_VALUE)
