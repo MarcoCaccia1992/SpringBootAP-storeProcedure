@@ -8,10 +8,7 @@ import com.example.microservice.entity.ShopsEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.EntityManager;
-import javax.persistence.ParameterMode;
-import javax.persistence.PersistenceContext;
-import javax.persistence.StoredProcedureQuery;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -92,6 +89,17 @@ public class CountriesUtils {
         return ceResult;
     }
 
+    public CountriesEntity getCountryByName(List<CountriesEntity> allCountries, String name_country){
+
+        CountriesEntity ceResult = new CountriesEntity();
+        for(CountriesEntity c : allCountries){
+            if (c.getName_country().equalsIgnoreCase(name_country)) {
+                ceResult = c;
+            }
+        }
+        return ceResult;
+    }
+
     // metodo per tornare una lista ordinata tramite lambda e con il reversed() le darà al contrario
     public List<CountriesEntity> orderListCountriesByIdSTREAM(List<CountriesEntity> list){
 
@@ -118,21 +126,4 @@ public class CountriesUtils {
 
 }
 
-
-
-
-
-    /*List<ShopsDTO> allShops = getAllShops();
-    ShopsUtils su = new ShopsUtils();
-    List<ShopsEntity> allShopsEntity = new ArrayList<>();
-        for(int i=0; i<allShops.size(); i++){
-        ShopsEntity se = new ShopsEntity();
-        se.setId_shop(allShops.get(i).getId_shop());
-        se.setName_shop(allShops.get(i).getName_shop());
-        allShopsEntity.add(se);
-    }
-    ShopsEntity lastShop = su.getLastShop(allShopsEntity);
-    CountriesEntity ce = new CountriesEntity();
-        ce.getCountryShop().add(lastShop);
-        countriesRepository.save(ce);*/
 

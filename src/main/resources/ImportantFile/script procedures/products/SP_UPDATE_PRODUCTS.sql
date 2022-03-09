@@ -9,7 +9,7 @@ BEGIN
     UPDATE products p
     SET p.name_product = V_name_product,
     p.code_product = V_code_product,
-    p.code_product = V_fk_shop
+    --p.code_product = V_fk_shop
     WHERE p.id_product = V_id_product;
 
 END;

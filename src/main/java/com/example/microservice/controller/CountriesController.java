@@ -1,6 +1,7 @@
 package com.example.microservice.controller;
 
 import com.example.microservice.DTO.CountriesDTO;
+import com.example.microservice.exception.CustomException;
 import com.example.microservice.service.CountryServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -36,6 +37,18 @@ public class CountriesController {
                                    @RequestParam("acronym_shop")String acronym_shop){
 
         return countryServiceImpl.insertNewCountrySP(name_country, acronym_shop);
+    }
+
+    @PostMapping(value = "/findCountryById", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Object findCountryById(@RequestParam("id_country")Integer id_country) throws CustomException {
+
+        return countryServiceImpl.findCountryById(id_country);
+    }
+
+    @PostMapping(value = "/findCountryByName", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Object findCountryByName(@RequestParam("name_country")String name_country) throws CustomException {
+
+        return countryServiceImpl.findCountryByNameCountry(name_country);
     }
 
     @PutMapping(value = "/updateCountrySP", produces = MediaType.APPLICATION_JSON_VALUE)

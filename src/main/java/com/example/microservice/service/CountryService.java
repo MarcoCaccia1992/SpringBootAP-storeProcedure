@@ -2,7 +2,7 @@ package com.example.microservice.service;
 
 import com.example.microservice.DTO.CountriesDTO;
 import com.example.microservice.entity.CountriesEntity;
-import com.example.microservice.entity.ProductsEntity;
+import com.example.microservice.exception.CustomException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,13 +10,17 @@ import java.util.List;
 @Service
 public interface CountryService {
 
-    public String insertNewCountrySP(String Country, String acronym_shop);
+    String insertNewCountrySP(String Country, String acronym_shop);
 
-    public List<CountriesEntity> allCountries();
+    List<CountriesEntity> allCountries();
 
-    public List<CountriesDTO> getAllCountriesWithoutJoin();
+    List<CountriesDTO> getAllCountriesWithoutJoin();
 
     String updateCountrySP(Integer id_country, String name_country, String acronym_shop);
 
     String deleteAndOrderCountryByIdSP(Integer id_country);
+
+    Object findCountryById(Integer id_country) throws CustomException;
+
+    Object findCountryByNameCountry(String name_country) throws CustomException;
 }
