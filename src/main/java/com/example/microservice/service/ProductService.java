@@ -21,4 +21,6 @@ public interface ProductService{
 
     public String updateProductsDataByIdCheckNULLSP(Integer id_product, String name_product, Integer code_product);
 
+    List<ProductsEntity> getAllProductsLinkedToShop(Integer fk_shop);
+
 }

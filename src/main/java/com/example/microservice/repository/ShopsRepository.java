@@ -3,6 +3,7 @@ package com.example.microservice.repository;
 import com.example.microservice.DTO.InnerJoinShopsProductsClassDTO;
 import com.example.microservice.DTO.InnerJoinShopsProductsInterfaceDTO;
 import com.example.microservice.DTO.ShopsDTO;
+import com.example.microservice.entity.ProductsEntity;
 import com.example.microservice.entity.ShopsEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -43,5 +44,10 @@ public interface ShopsRepository extends JpaRepository<ShopsEntity, Integer> {
     public void  updateShopNATIVE(@Param("id_shop")Integer id_shop,
                                     @Param("name_shop")String name_shop,
                                     @Param("region_code")String region_code);
+
+    @Modifying
+    @Transactional
+    @Query(value = "SELECT products p WHERE p.fk_shop = :id_shop", nativeQuery = true)
+    List<ProductsEntity> getAllProductByFK_SHOP(@Param("id_shop")Integer id_shop);
 
 }

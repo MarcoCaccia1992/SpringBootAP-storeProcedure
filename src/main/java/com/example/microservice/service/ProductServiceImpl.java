@@ -61,7 +61,7 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public List<ProductsEntity> deleteAndOrderProductsByIDsSP(Integer id_product) {
 
-        productsUtils.sp_deleteUsers(id_product);
+        productsUtils.sp_deleteProductById(id_product);
         productsUtils.sp_orderProductsIDS(id_product);
 
         List<ProductsEntity> allProducts = allProducts();
@@ -89,6 +89,11 @@ public class ProductServiceImpl implements ProductService{
         return "You've already updated PRODUCT --> FROM:\n" + productBeforeUpdate.getName_product() + "\n" + productBeforeUpdate.getCode_product() + "\n" +
                 "-->TO:\n" + productsEntityAfterUpdate.getName_product() + "\n" + productsEntityAfterUpdate.getCode_product();
 
+    }
+
+    @Override
+    public List<ProductsEntity> getAllProductsLinkedToShop(Integer fk_shop){
+        return productsRepository.getAllProductByFK_SHOP(fk_shop);
     }
 
 

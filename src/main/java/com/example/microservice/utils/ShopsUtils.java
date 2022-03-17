@@ -1,15 +1,19 @@
 package com.example.microservice.utils;
 
+import com.example.microservice.DTO.ProductsDTO;
 import com.example.microservice.DTO.ShopsDTO;
 import com.example.microservice.entity.CountriesEntity;
+import com.example.microservice.entity.ProductsEntity;
 import com.example.microservice.entity.ShopsEntity;
 import com.example.microservice.mapper.MappingUtils;
 import lombok.NoArgsConstructor;
+import org.apache.logging.log4j.util.PropertySource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -113,6 +117,21 @@ public class ShopsUtils {
         return ceList;
     }
 
+    public List<ProductsEntity> getAllProducts() {
+
+        List<ProductsEntity> getAllProductByFk_Shop = new ArrayList<>();
+
+        try {
+            Query q = entityManager.createQuery("SELECT p FROM ProductsEntity p");
+            getAllProductByFk_Shop = q.getResultList();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return getAllProductByFk_Shop;
+    }
+
 
 //-----------------------------------------------BUSINESS-LOGIC------------------------------------------------
 
@@ -120,13 +139,13 @@ public class ShopsUtils {
     public ShopsEntity getLastShop(List<ShopsEntity> allShops) {
 
         ShopsEntity seResult = new ShopsEntity();
-        if(!allShops.isEmpty()) {
+        if (!allShops.isEmpty()) {
             for (int i = 0; i < allShops.size(); i++) {
                 if (i == allShops.size() - 1) {
                     seResult = allShops.get(i);
                 }
             }
-        }else{
+        } else {
             seResult = null;
         }
 
@@ -173,7 +192,7 @@ public class ShopsUtils {
     public CountriesEntity getCountryByNameCountryFromSU(List<CountriesEntity> allCountries, String country_name) {
 
         CountriesEntity ceResult = new CountriesEntity();
-        if(!allCountries.isEmpty()) {
+        if (!allCountries.isEmpty()) {
             for (int i = 0; i < allCountries.size(); i++) {
                 if (allCountries.get(i).getName_country().equalsIgnoreCase(country_name)) {
                     ceResult = allCountries.get(i);
@@ -182,18 +201,18 @@ public class ShopsUtils {
                     ceResult = null;
                 }
             }
-        }else{
+        } else {
             ceResult = null;
         }
 
         return ceResult;
     }
 
-    public CountriesEntity getCountryByName(List<CountriesEntity> ceList, String name_country){
+    public CountriesEntity getCountryByName(List<CountriesEntity> ceList, String name_country) {
 
         CountriesEntity ce = new CountriesEntity();
-        for(CountriesEntity cet : ceList){
-            if(name_country.equalsIgnoreCase(cet.getName_country())){
+        for (CountriesEntity cet : ceList) {
+            if (name_country.equalsIgnoreCase(cet.getName_country())) {
                 ce = cet;
             }
         }
@@ -237,72 +256,72 @@ public class ShopsUtils {
         return exit;
     }
 
-    public CountriesEntity createNewCountryByRegionCode(String region_code){
+    public CountriesEntity createNewCountryByRegionCode(String region_code) {
 
         CountriesEntity ce = new CountriesEntity();
         String checkRegion = null;
-        if(region_code.equalsIgnoreCase("ve")){
+        if (region_code.equalsIgnoreCase("ve")) {
             checkRegion = "Venezia";
             // get all countries already present on DB
             List<CountriesEntity> ceList = getAllCountriesEntityListUpdated();
             // return object by region_name parameter and take the last Country
             CountriesEntity lastCe = getLastCountryFromSU(ceList);
             CountriesEntity ceIfAlreadyExist = getCountryByNameCountryFromSU(ceList, checkRegion);
-            if(ceIfAlreadyExist != null) {
-                ce = mappingUtils.getMappedCountriesEntity(lastCe.getId_country() +1, checkRegion, "GDO");
-            }else{
+            if (ceIfAlreadyExist != null) {
+                ce = mappingUtils.getMappedCountriesEntity(lastCe.getId_country() + 1, checkRegion, "GDO");
+            } else {
                 ce = mappingUtils.getMappedCountriesEntity(1, "Venezia", "GDO");
             }
         }
-        if(region_code.equalsIgnoreCase("bs")){
+        if (region_code.equalsIgnoreCase("bs")) {
             checkRegion = "Basilicata";
             // get all countries already present on DB
             List<CountriesEntity> ceList = getAllCountriesEntityListUpdated();
             // return object by region_name parameter and take the last Country
             CountriesEntity lastCe = getLastCountryFromSU(ceList);
             CountriesEntity ceIfAlreadyExist = getCountryByNameCountryFromSU(ceList, checkRegion);
-            if(ceIfAlreadyExist != null) {
-                ce = mappingUtils.getMappedCountriesEntity(lastCe.getId_country() +1, checkRegion, "GDO");
-            }else{
+            if (ceIfAlreadyExist != null) {
+                ce = mappingUtils.getMappedCountriesEntity(lastCe.getId_country() + 1, checkRegion, "GDO");
+            } else {
                 ce = mappingUtils.getMappedCountriesEntity(1, checkRegion, "GDO");
             }
         }
-        if(region_code.equalsIgnoreCase("pu")){// da reèlicare in tutti i casi
+        if (region_code.equalsIgnoreCase("pu")) {// da reèlicare in tutti i casi
             checkRegion = "Puglia";
             // get all countries already present on DB
             List<CountriesEntity> ceList = getAllCountriesEntityListUpdated();
             // return object by region_name parameter and take the last Country
             CountriesEntity lastCe = getLastCountryFromSU(ceList);
             CountriesEntity ceIfAlreadyExist = getCountryByNameCountryFromSU(ceList, checkRegion);
-            if(ceIfAlreadyExist != null || !ceList.isEmpty()) {
-                ce = mappingUtils.getMappedCountriesEntity(lastCe.getId_country() +1, checkRegion, "GDO");
-            }else if(ceIfAlreadyExist == null || ceList.isEmpty()){
+            if (ceIfAlreadyExist != null || !ceList.isEmpty()) {
+                ce = mappingUtils.getMappedCountriesEntity(lastCe.getId_country() + 1, checkRegion, "GDO");
+            } else if (ceIfAlreadyExist == null || ceList.isEmpty()) {
                 ce = mappingUtils.getMappedCountriesEntity(1, checkRegion, "GDO");
             }
         }
-        if(region_code.equalsIgnoreCase("ca")){
+        if (region_code.equalsIgnoreCase("ca")) {
             checkRegion = "Calabria";
             // get all countries already present on DB
             List<CountriesEntity> ceList = getAllCountriesEntityListUpdated();
             // return object by region_name parameter and take the last Country
             CountriesEntity lastCe = getLastCountryFromSU(ceList);
             CountriesEntity ceIfAlreadyExist = getCountryByNameCountryFromSU(ceList, checkRegion);
-            if(ceIfAlreadyExist != null) {
-                ce = mappingUtils.getMappedCountriesEntity(lastCe.getId_country() +1, checkRegion, "GDO");
-            }else{
+            if (ceIfAlreadyExist != null) {
+                ce = mappingUtils.getMappedCountriesEntity(lastCe.getId_country() + 1, checkRegion, "GDO");
+            } else {
                 ce = mappingUtils.getMappedCountriesEntity(1, checkRegion, "GDO");
             }
         }
-        if(region_code.equalsIgnoreCase("lo")){
+        if (region_code.equalsIgnoreCase("lo")) {
             checkRegion = "Lombardia";
             // get all countries already present on DB
             List<CountriesEntity> ceList = getAllCountriesEntityListUpdated();
             // return object by region_name parameter and take the last Country
             CountriesEntity lastCe = getLastCountryFromSU(ceList);
             CountriesEntity ceIfAlreadyExist = getCountryByNameCountryFromSU(ceList, checkRegion);
-            if(ceIfAlreadyExist != null) {
-                ce = mappingUtils.getMappedCountriesEntity(lastCe.getId_country() +1, checkRegion, "GDO");
-            }else{
+            if (ceIfAlreadyExist != null) {
+                ce = mappingUtils.getMappedCountriesEntity(lastCe.getId_country() + 1, checkRegion, "GDO");
+            } else {
                 ce = mappingUtils.getMappedCountriesEntity(1, checkRegion, "GDO");
             }
         }
@@ -340,18 +359,18 @@ public class ShopsUtils {
                     //populate the first countries Object and check if the ID is alredy present or not by CountryEntity OBJ
                     CountriesEntity CEAlreadyPresent = new CountriesEntity();
                     //if the Object is null and list isn't empty then update the Object by inserted information
-                    if(CEbyNameCountry == null && !allCountriesBeforeUpdate.isEmpty()){
+                    if (CEbyNameCountry == null && !allCountriesBeforeUpdate.isEmpty()) {
                         CEAlreadyPresent = getLastCountryFromSU(allCountriesBeforeUpdate);
-                        ce = mappingUtils.getMappedCountriesEntity(CEAlreadyPresent.getId_country() +1, "Veneto", "GDO");
+                        ce = mappingUtils.getMappedCountriesEntity(CEAlreadyPresent.getId_country() + 1, "Veneto", "GDO");
 
                         sp_insertCountriesCheckIdFromSU(ce.getName_country(), ce.getAcronym_shop());
                     }
                     //if the Object is not null and list is empty then update the Object by inserted information
-                    if(ifAlreadyPresent(compareRegionCodeWithRegionName, allCountriesBeforeUpdate) && CEbyNameCountry != null){
+                    if (ifAlreadyPresent(compareRegionCodeWithRegionName, allCountriesBeforeUpdate) && CEbyNameCountry != null) {
                         ce = mappingUtils.getMappedCountriesEntity(CEbyNameCountry.getId_country(), CEbyNameCountry.getName_country(), CEbyNameCountry.getAcronym_shop());
                     }
                     //if the Object is null and the list is empty the create new object to insert into DB to allow insert new data in join
-                    if(CEbyNameCountry == null && allCountriesBeforeUpdate.isEmpty()){
+                    if (CEbyNameCountry == null && allCountriesBeforeUpdate.isEmpty()) {
                         ce = mappingUtils.getMappedCountriesEntity(1, "Veneto", "GDO");
 
                         sp_insertCountriesCheckIdFromSU(ce.getName_country(), ce.getAcronym_shop());
@@ -361,24 +380,24 @@ public class ShopsUtils {
                     shopsEntityListBeforeUpdate = orderListShopsEntityByIdSTREAM(shopsEntityListBeforeUpdate);
                     ShopsEntity lastShopBeforeUpdate = getLastShop(shopsEntityListBeforeUpdate);
                     //and create populate new Shop Object with the ManyToMany join and insert all into DB + check if exist
-                    if(lastShopBeforeUpdate != null) {
+                    if (lastShopBeforeUpdate != null) {
                         se = mappingUtils.getMappedShopsEntity(lastShopBeforeUpdate.getId_shop() + 1, name_shop, region_code);
                         se.addCountryToShop(ce);
-                    }else{
+                    } else {
                         se = mappingUtils.getMappedShopsEntity(1, name_shop, region_code);
                         se.addCountryToShop(ce);
                     }
 
-                }else{
+                } else {
                     // if already present the Country Object i create Shop Object only and insert that on DB
                     List<ShopsEntity> shopsEntityListBeforeUpdate = getAllShopsEntityListUpdated();
                     shopsEntityListBeforeUpdate = orderListShopsEntityByIdSTREAM(shopsEntityListBeforeUpdate);
                     ShopsEntity lastShopBeforeUpdate = getLastShop(shopsEntityListBeforeUpdate);
 
-                    if(lastShopBeforeUpdate == null || lastShopBeforeUpdate.getId_shop() == null || lastShopBeforeUpdate.getId_shop() == 0){
+                    if (lastShopBeforeUpdate == null || lastShopBeforeUpdate.getId_shop() == null || lastShopBeforeUpdate.getId_shop() == 0) {
                         se = mappingUtils.getMappedShopsEntity(1, name_shop, region_code);
 
-                    }else{
+                    } else {
                         se = mappingUtils.getMappedShopsEntity(lastShopBeforeUpdate.getId_shop() + 1, name_shop, region_code);
                     }
 
@@ -390,7 +409,7 @@ public class ShopsUtils {
 
                 }
             }
-        }else{
+        } else {
             throw new IllegalArgumentException("The RegionCode does not exist in our DB!");
         }
 
@@ -415,18 +434,18 @@ public class ShopsUtils {
                     //populate the first countries Object and check if the ID is alredy present or not by CountryEntity OBJ
                     CountriesEntity CEAlreadyPresent = new CountriesEntity();
                     //if the Object is null and list isn't empty then update the Object by inserted information
-                    if(CEbyNameCountry == null && !allCountriesBeforeUpdate.isEmpty()){
+                    if (CEbyNameCountry == null && !allCountriesBeforeUpdate.isEmpty()) {
                         CEAlreadyPresent = getLastCountryFromSU(allCountriesBeforeUpdate);
-                        ce = mappingUtils.getMappedCountriesEntity(CEAlreadyPresent.getId_country() +1, "Basilicata", "GDO");
+                        ce = mappingUtils.getMappedCountriesEntity(CEAlreadyPresent.getId_country() + 1, "Basilicata", "GDO");
 
                         sp_insertCountriesCheckIdFromSU(ce.getName_country(), ce.getAcronym_shop());
                     }
                     //if the Object is not null and list is empty then update the Object by inserted information
-                    if(ifAlreadyPresent(compareRegionCodeWithRegionName, allCountriesBeforeUpdate) && CEbyNameCountry != null){
+                    if (ifAlreadyPresent(compareRegionCodeWithRegionName, allCountriesBeforeUpdate) && CEbyNameCountry != null) {
                         ce = mappingUtils.getMappedCountriesEntity(CEbyNameCountry.getId_country(), CEbyNameCountry.getName_country(), CEbyNameCountry.getAcronym_shop());
                     }
                     //if the Object is null and the list is empty the create new object to insert into DB to allow insert new data in join
-                    if(CEbyNameCountry == null && allCountriesBeforeUpdate.isEmpty()){
+                    if (CEbyNameCountry == null && allCountriesBeforeUpdate.isEmpty()) {
                         ce = mappingUtils.getMappedCountriesEntity(1, "Basilicata", "GDO");
 
                         sp_insertCountriesCheckIdFromSU(ce.getName_country(), ce.getAcronym_shop());
@@ -436,24 +455,24 @@ public class ShopsUtils {
                     shopsEntityListBeforeUpdate = orderListShopsEntityByIdSTREAM(shopsEntityListBeforeUpdate);
                     ShopsEntity lastShopBeforeUpdate = getLastShop(shopsEntityListBeforeUpdate);
                     //and create populate new Shop Object with the ManyToMany join and insert all into DB + check if exist
-                    if(lastShopBeforeUpdate != null) {
+                    if (lastShopBeforeUpdate != null) {
                         se = mappingUtils.getMappedShopsEntity(lastShopBeforeUpdate.getId_shop() + 1, name_shop, region_code);
                         se.addCountryToShop(ce);
-                    }else{
+                    } else {
                         se = mappingUtils.getMappedShopsEntity(1, name_shop, region_code);
                         se.addCountryToShop(ce);
                     }
 
-                }else{
+                } else {
                     // if already present the Country Object i create Shop Object only and insert that on DB
                     List<ShopsEntity> shopsEntityListBeforeUpdate = getAllShopsEntityListUpdated();
                     shopsEntityListBeforeUpdate = orderListShopsEntityByIdSTREAM(shopsEntityListBeforeUpdate);
                     ShopsEntity lastShopBeforeUpdate = getLastShop(shopsEntityListBeforeUpdate);
 
-                    if(lastShopBeforeUpdate.getId_shop() == null || lastShopBeforeUpdate.getId_shop() == 0 ){
+                    if (lastShopBeforeUpdate.getId_shop() == null || lastShopBeforeUpdate.getId_shop() == 0) {
                         se = mappingUtils.getMappedShopsEntity(1, name_shop, region_code);
 
-                    }else{
+                    } else {
                         se = mappingUtils.getMappedShopsEntity(lastShopBeforeUpdate.getId_shop() + 1, name_shop, region_code);
                     }
 
@@ -465,7 +484,7 @@ public class ShopsUtils {
 
                 }
             }
-        }else{
+        } else {
             throw new IllegalArgumentException("The RegionCode does not exist in our DB!");
         }
 
@@ -490,18 +509,18 @@ public class ShopsUtils {
                     //populate the first countries Object and check if the ID is alredy present or not by CountryEntity OBJ
                     CountriesEntity CEAlreadyPresent = new CountriesEntity();
                     //if the Object is null and list isn't empty then update the Object by inserted information
-                    if(CEbyNameCountry == null && !allCountriesBeforeUpdate.isEmpty()){
+                    if (CEbyNameCountry == null && !allCountriesBeforeUpdate.isEmpty()) {
                         CEAlreadyPresent = getLastCountryFromSU(allCountriesBeforeUpdate);
-                        ce = mappingUtils.getMappedCountriesEntity(CEAlreadyPresent.getId_country() +1, "Puglia", "GDO");
+                        ce = mappingUtils.getMappedCountriesEntity(CEAlreadyPresent.getId_country() + 1, "Puglia", "GDO");
 
                         sp_insertCountriesCheckIdFromSU(ce.getName_country(), ce.getAcronym_shop());
                     }
                     //if the Object is not null and list is empty then update the Object by inserted information
-                    if(ifAlreadyPresent(compareRegionCodeWithRegionName, allCountriesBeforeUpdate) && CEbyNameCountry != null){
+                    if (ifAlreadyPresent(compareRegionCodeWithRegionName, allCountriesBeforeUpdate) && CEbyNameCountry != null) {
                         ce = mappingUtils.getMappedCountriesEntity(CEbyNameCountry.getId_country(), CEbyNameCountry.getName_country(), CEbyNameCountry.getAcronym_shop());
                     }
                     //if the Object is null and the list is empty the create new object to insert into DB to allow insert new data in join
-                    if(CEbyNameCountry == null && allCountriesBeforeUpdate.isEmpty()){
+                    if (CEbyNameCountry == null && allCountriesBeforeUpdate.isEmpty()) {
                         ce = mappingUtils.getMappedCountriesEntity(1, "Puglia", "GDO");
 
                         sp_insertCountriesCheckIdFromSU(ce.getName_country(), ce.getAcronym_shop());
@@ -512,24 +531,24 @@ public class ShopsUtils {
                     shopsEntityListBeforeUpdate = orderListShopsEntityByIdSTREAM(shopsEntityListBeforeUpdate);
                     ShopsEntity lastShopBeforeUpdate = getLastShop(shopsEntityListBeforeUpdate);
                     //and create populate new Shop Object with the ManyToMany join and insert all into DB + check if exist
-                    if(lastShopBeforeUpdate != null) {
+                    if (lastShopBeforeUpdate != null) {
                         se = mappingUtils.getMappedShopsEntity(lastShopBeforeUpdate.getId_shop() + 1, name_shop, region_code);
                         se.addCountryToShop(ce);
-                    }else{
+                    } else {
                         se = mappingUtils.getMappedShopsEntity(1, name_shop, region_code);
                         se.addCountryToShop(ce);
                     }
 
-                }else{
+                } else {
                     // if already present the Country Object i create Shop Object only and insert that on DB
                     List<ShopsEntity> shopsEntityListBeforeUpdate = getAllShopsEntityListUpdated();
                     shopsEntityListBeforeUpdate = orderListShopsEntityByIdSTREAM(shopsEntityListBeforeUpdate);
                     ShopsEntity lastShopBeforeUpdate = getLastShop(shopsEntityListBeforeUpdate);
 
-                    if(lastShopBeforeUpdate == null || lastShopBeforeUpdate.getId_shop() == null || lastShopBeforeUpdate.getId_shop() == 0){
+                    if (lastShopBeforeUpdate == null || lastShopBeforeUpdate.getId_shop() == null || lastShopBeforeUpdate.getId_shop() == 0) {
                         se = mappingUtils.getMappedShopsEntity(1, name_shop, region_code);
 
-                    }else{
+                    } else {
                         se = mappingUtils.getMappedShopsEntity(lastShopBeforeUpdate.getId_shop() + 1, name_shop, region_code);
                     }
 
@@ -541,7 +560,7 @@ public class ShopsUtils {
 
                 }
             }
-        }else{
+        } else {
             throw new IllegalArgumentException("The RegionCode does not exist in our DB!");
         }
 
@@ -566,18 +585,18 @@ public class ShopsUtils {
                     //populate the first countries Object and check if the ID is alredy present or not by CountryEntity OBJ
                     CountriesEntity CEAlreadyPresent = new CountriesEntity();
                     //if the Object is null and list isn't empty then update the Object by inserted information
-                    if(CEbyNameCountry == null && !allCountriesBeforeUpdate.isEmpty()){
+                    if (CEbyNameCountry == null && !allCountriesBeforeUpdate.isEmpty()) {
                         CEAlreadyPresent = getLastCountryFromSU(allCountriesBeforeUpdate);
-                        ce = mappingUtils.getMappedCountriesEntity(CEAlreadyPresent.getId_country() +1, "Calabria", "GDO");
+                        ce = mappingUtils.getMappedCountriesEntity(CEAlreadyPresent.getId_country() + 1, "Calabria", "GDO");
 
                         sp_insertCountriesCheckIdFromSU(ce.getName_country(), ce.getAcronym_shop());
                     }
                     //if the Object is already present and the first Object isn't empty then update that information
-                    if(ifAlreadyPresent(compareRegionCodeWithRegionName, allCountriesBeforeUpdate) && CEbyNameCountry != null){
+                    if (ifAlreadyPresent(compareRegionCodeWithRegionName, allCountriesBeforeUpdate) && CEbyNameCountry != null) {
                         ce = mappingUtils.getMappedCountriesEntity(CEbyNameCountry.getId_country(), CEbyNameCountry.getName_country(), CEbyNameCountry.getAcronym_shop());
                     }
                     //if the Object is null and the list is empty the create new object to insert into DB to allow insert new data in join
-                    if(CEbyNameCountry == null && allCountriesBeforeUpdate.isEmpty()){
+                    if (CEbyNameCountry == null && allCountriesBeforeUpdate.isEmpty()) {
                         ce = mappingUtils.getMappedCountriesEntity(1, "Calabria", "GDO");
 
                         sp_insertCountriesCheckIdFromSU(ce.getName_country(), ce.getAcronym_shop());
@@ -587,24 +606,24 @@ public class ShopsUtils {
                     shopsEntityListBeforeUpdate = orderListShopsEntityByIdSTREAM(shopsEntityListBeforeUpdate);
                     ShopsEntity lastShopBeforeUpdate = getLastShop(shopsEntityListBeforeUpdate);
                     //and create populate new Shop Object with the ManyToMany join and insert all into DB + check if exist
-                    if(lastShopBeforeUpdate != null) {
+                    if (lastShopBeforeUpdate != null) {
                         se = mappingUtils.getMappedShopsEntity(lastShopBeforeUpdate.getId_shop() + 1, name_shop, region_code);
                         se.addCountryToShop(ce);
-                    }else{
+                    } else {
                         se = mappingUtils.getMappedShopsEntity(1, name_shop, region_code);
                         se.addCountryToShop(ce);
                     }
 
-                }else{
+                } else {
                     // if already present the Country Object i create Shop Object only and insert that on DB
                     List<ShopsEntity> shopsEntityListBeforeUpdate = getAllShopsEntityListUpdated();
                     shopsEntityListBeforeUpdate = orderListShopsEntityByIdSTREAM(shopsEntityListBeforeUpdate);
                     ShopsEntity lastShopBeforeUpdate = getLastShop(shopsEntityListBeforeUpdate);
 
-                    if(lastShopBeforeUpdate.getId_shop() == null || lastShopBeforeUpdate.getId_shop() == 0 ){
+                    if (lastShopBeforeUpdate.getId_shop() == null || lastShopBeforeUpdate.getId_shop() == 0) {
                         se = mappingUtils.getMappedShopsEntity(1, name_shop, region_code);
 
-                    }else{
+                    } else {
                         se = mappingUtils.getMappedShopsEntity(lastShopBeforeUpdate.getId_shop() + 1, name_shop, region_code);
                     }
 
@@ -616,7 +635,7 @@ public class ShopsUtils {
 
                 }
             }
-        }else{
+        } else {
             throw new IllegalArgumentException("The RegionCode does not exist in our DB!");
         }
 
@@ -642,20 +661,20 @@ public class ShopsUtils {
                     //populate the first countries Object and check if the ID is already present or not by CountryEntity OBJ
                     CountriesEntity CEAlreadyPresent;
                     //if the Object is not null and list isn't empty then update the Object by inserted information
-                    if(CEbyNameCountry == null && !allCountriesBeforeUpdate.isEmpty()){
+                    if (CEbyNameCountry == null && !allCountriesBeforeUpdate.isEmpty()) {
                         CEAlreadyPresent = getLastCountryFromSU(allCountriesBeforeUpdate);
-                        ce = mappingUtils.getMappedCountriesEntity(CEAlreadyPresent.getId_country() +1, "Lombardia", "GDO");
+                        ce = mappingUtils.getMappedCountriesEntity(CEAlreadyPresent.getId_country() + 1, "Lombardia", "GDO");
 
                         sp_insertCountriesCheckIdFromSU(ce.getName_country(), ce.getAcronym_shop());
                     }
                     //if the Object is null and the list is empty the create new object to insert into DB to allow insert new data in join
-                    if(CEbyNameCountry == null && allCountriesBeforeUpdate.isEmpty()){
+                    if (CEbyNameCountry == null && allCountriesBeforeUpdate.isEmpty()) {
                         ce = mappingUtils.getMappedCountriesEntity(1, "Lombardia", "GDO");
 
                         sp_insertCountriesCheckIdFromSU(ce.getName_country(), ce.getAcronym_shop());
                     }
                     //if the Object is already present and the first Object isn't null then update that information
-                    if(ifAlreadyPresent(compareRegionCodeWithRegionName, allCountriesBeforeUpdate) && CEbyNameCountry != null){
+                    if (ifAlreadyPresent(compareRegionCodeWithRegionName, allCountriesBeforeUpdate) && CEbyNameCountry != null) {
                         ce = mappingUtils.getMappedCountriesEntity(CEbyNameCountry.getId_country(), CEbyNameCountry.getName_country(), CEbyNameCountry.getAcronym_shop());
                     }
 
@@ -665,24 +684,24 @@ public class ShopsUtils {
                     ShopsEntity lastShopBeforeUpdate = getLastShop(shopsEntityListBeforeUpdate);
                     //and create populate new Shop Object with the ManyToMany join and insert all into DB + check if exist
 
-                    if(lastShopBeforeUpdate != null) {
+                    if (lastShopBeforeUpdate != null) {
                         se = mappingUtils.getMappedShopsEntity(lastShopBeforeUpdate.getId_shop() + 1, name_shop, region_code);
                         se.addCountryToShop(ce);
-                    }else{
+                    } else {
                         se = mappingUtils.getMappedShopsEntity(1, name_shop, region_code);
                         se.addCountryToShop(ce);
                     }
 
-                }else{
+                } else {
                     // if already present the Country Object i create Shop Object only and insert that on DB
                     List<ShopsEntity> shopsEntityListBeforeUpdate = getAllShopsEntityListUpdated();
                     shopsEntityListBeforeUpdate = orderListShopsEntityByIdSTREAM(shopsEntityListBeforeUpdate);
                     ShopsEntity lastShopBeforeUpdate = getLastShop(shopsEntityListBeforeUpdate);
 
-                    if(lastShopBeforeUpdate == null || lastShopBeforeUpdate.getId_shop() == 0 ){
+                    if (lastShopBeforeUpdate == null || lastShopBeforeUpdate.getId_shop() == 0) {
                         se = mappingUtils.getMappedShopsEntity(1, name_shop, region_code);
 
-                    }else{
+                    } else {
                         se = mappingUtils.getMappedShopsEntity(lastShopBeforeUpdate.getId_shop() + 1, name_shop, region_code);
                     }
 
@@ -694,23 +713,23 @@ public class ShopsUtils {
 
                 }
             }
-        }else{
+        } else {
             throw new IllegalArgumentException("The RegionCode does not exist in our DB!");
         }
 
         return se;
     }
 
-    public Map<String, Object> updateShopAndCheckRegionCode(Integer id_shop, String name_shop, String region_code){
+    public Map<String, Object> updateShopAndCheckRegionCode(Integer id_shop, String name_shop, String region_code) {
 
         ShopsEntity seBeforeUpdate = getShopById(id_shop);
         ShopsEntity seToUpdate = new ShopsEntity();
         Map<String, Object> resultMap = new HashMap<>();
-        if(region_code == null || region_code.isEmpty()){
+        if (region_code == null || region_code.isEmpty()) {
             sp_updateShops(id_shop, name_shop, seBeforeUpdate.getRegion_code());
 
-        }else{
-            if(seBeforeUpdate.getRegion_code() != region_code && checkRegionCodeList(region_code)){
+        } else {
+            if (seBeforeUpdate.getRegion_code() != region_code && checkRegionCodeList(region_code)) {
                 CountriesEntity ce = createNewCountryByRegionCode(region_code);
                 // da vedere se con la save lo sovrascrive possibile erroe
                 seToUpdate = getShopById(id_shop);
@@ -720,7 +739,7 @@ public class ShopsUtils {
                 resultMap.put("shop", seToUpdate);
                 resultMap.put("country", ce);
 
-            }else{
+            } else {
                 sp_updateShops(id_shop, name_shop, region_code);
                 seToUpdate.setId_shop(id_shop);
                 seToUpdate.setName_shop(name_shop);
@@ -731,6 +750,28 @@ public class ShopsUtils {
         return resultMap;
     }
 
+    public Integer getMaxProductIdByList(List<ProductsEntity> allProducts, Integer id_shop) {
+
+        Integer result = 0;
+        List<ProductsEntity> tmp = new ArrayList<>();
+        for (ProductsEntity p : allProducts) {
+            if (p.getFk_shop() == id_shop) {
+
+                tmp.add(p);
+            }
+        }
+
+        if(!tmp.isEmpty()) {
+
+            tmp.sort(Comparator.comparing(ProductsEntity::getId_product));
+            result = tmp.get(tmp.size()-1).getId_product();
+
+        }else{
+
+            result = 0;
+        }
+        return result;
+    }
 
 }
 

@@ -21,4 +21,7 @@ public class ProductsEntity{
     @Column(name="code_product")
     private Integer code_product;
 
+    @Column(name="fk_shop")
+    private Integer fk_shop;
+
 }

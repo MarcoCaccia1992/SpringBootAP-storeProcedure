@@ -2,19 +2,19 @@ package com.example.microservice.service;
 
 import com.example.microservice.DTO.InnerJoinShopsProductsClassDTO;
 import com.example.microservice.DTO.InnerJoinShopsProductsInterfaceDTO;
+import com.example.microservice.DTO.ProductsDTO;
 import com.example.microservice.DTO.ShopsDTO;
 import com.example.microservice.entity.CountriesEntity;
+import com.example.microservice.entity.ProductsEntity;
 import com.example.microservice.entity.ShopsEntity;
 import com.example.microservice.repository.ShopsRepository;
 import com.example.microservice.utils.JoinUtils;
+import com.example.microservice.utils.ProductsUtils;
 import com.example.microservice.utils.ShopsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ShopsServiceImpl implements ShopsService{
@@ -22,12 +22,14 @@ public class ShopsServiceImpl implements ShopsService{
     private ShopsUtils shopsUtils;
     private ShopsRepository shopsRepository;
     private JoinUtils joinUtils;
+    private ProductsUtils productsUtils;
 
     @Autowired
-    public ShopsServiceImpl(ShopsUtils shopsUtils, ShopsRepository shopsRepository, JoinUtils joinUtils){
+    public ShopsServiceImpl(ShopsUtils shopsUtils, ShopsRepository shopsRepository, JoinUtils joinUtils, ProductsUtils productsUtils){
         this.shopsUtils = shopsUtils;
         this.shopsRepository = shopsRepository;
         this.joinUtils = joinUtils;
+        this.productsUtils = productsUtils;
     }
 
 
@@ -156,14 +158,33 @@ public class ShopsServiceImpl implements ShopsService{
     }
 
     @Override
+    public List<ProductsEntity> getAllProductsByFK_SHOP(Integer fk_shop) {
+
+        List<ProductsEntity> getAllProductByFk_Shop = shopsRepository.getAllProductByFK_SHOP(fk_shop);
+        return getAllProductByFk_Shop;
+    }
+
+    @Override
     public String deleteShopAndOrderByIdSP(Integer id_shop) {
 
         ShopsEntity shopToDelete = shopsUtils.getShopById(id_shop);
-        //joinUtils.queryToDeleteRecordMTMBYId("id_shop", shopToDelete.getId_shop());
+
+        //-------take the Product's List to extract  the fk_shop data
+        List<ProductsEntity> allProductsIntoDB = shopsUtils.getAllProducts();
+
         shopsUtils.sp_deleteShopsById(id_shop);
         shopsUtils.sp_orderShopsById(id_shop);
+
+        //-------take the id_product from List to start BusinessOrderLogic per Products order
+        Integer checkProductIdToOrder = shopsUtils.getMaxProductIdByList(allProductsIntoDB, shopToDelete.getId_shop());
+
+        if(checkProductIdToOrder != 0) {
+            productsUtils.sp_orderProductsIDS(checkProductIdToOrder);
+        }
+
         return "you've deleted the follow shop: \n" + shopToDelete.getId_shop() + "\n" + shopToDelete.getName_shop() + "\n" + shopToDelete.getRegion_code();
     }
+
 
 
 }

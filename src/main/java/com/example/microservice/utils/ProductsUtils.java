@@ -43,7 +43,7 @@ public class ProductsUtils {
         spQueryInsertProductsCheckId.execute();
     }
 
-    public void sp_deleteUsers(Integer id_product){
+    public void sp_deleteProductById(Integer id_product){
 
         StoredProcedureQuery spQueryDeleteUsers= entityManager.createStoredProcedureQuery("sp_deleteProducts")
                 .registerStoredProcedureParameter(1, Integer.class, ParameterMode.IN)
@@ -125,6 +125,8 @@ public class ProductsUtils {
 
         return sortedProducts;
     }
+
+
 
 
 }
